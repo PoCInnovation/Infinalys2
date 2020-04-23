@@ -32,9 +32,6 @@ In the companies.csv you got a list of the Best 506 companies in the trading mar
 
 And you can copy in this file somme companies and put them into the file companies_test to evaluate them
 
-![](image/List_of_companies.png)
-![](image/companies_test.png)
-
 the result of the fetch of companies_test is put into the ```stock ``` file 
 
 ## Built With
