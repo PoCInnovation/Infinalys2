@@ -1,11 +1,11 @@
-#JUPYTER NOTEBOOK TRAINING DEPENDENCIES
+# JUPYTER NOTEBOOK TRAINING DEPENDENCIES
 
-#Matplotlib
+# Matplotlib
 ```
 pip install matplotlib --user
 ```
 
-#Numpy and Pandas
+# Numpy and Pandas
 ```
 pip install pandas --user
 ```
@@ -14,12 +14,12 @@ pip install pandas --user
 pip install numpy --user
 ```
 
-#Tenserflow
+# Tenserflow
 ```
 pip install tensorflow==2.0.0-alpha
 ```
 
-#Sklearn
+# Sklearn
 ```
 pip install sklearn --user
 ```
