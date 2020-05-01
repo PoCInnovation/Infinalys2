@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import json
-import pandas as pd
+import pandas
 from fetch import download_stocks
 from predict import predict_on_stocks
 
@@ -19,8 +19,8 @@ def create_results(stocks_path: str, preds_path: str, results_path: str):
     for file in dirs:
         stock_filepath = os.path.join(stocks_path, file)
         preds_filepath = os.path.join(preds_path, file)
-        stock = pd.read_csv(stock_filepath, squeeze=True)
-        preds = pd.read_csv(preds_filepath, squeeze=True)
+        stock = pandas.read_csv(stock_filepath, squeeze=True)
+        preds = pandas.read_csv(preds_filepath, squeeze=True)
 
         result = {
             'stocks': {
@@ -44,5 +44,5 @@ def create_results(stocks_path: str, preds_path: str, results_path: str):
 
 if __name__ == "__main__":
     download_stocks(TEST_COMPANIES_PATH, STOCKS_PATH, max_dl=100)
-    #predict_on_stocks(STOCKS_PATH, PREDICTIONS_PATH, MODELS_PATH)
+    predict_on_stocks(STOCKS_PATH, PREDICTIONS_PATH, MODELS_PATH)
     #create_results(STOCKS_PATH, PREDICTIONS_PATH, RESULT_PATH)
