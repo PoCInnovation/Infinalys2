@@ -11,8 +11,9 @@ import os
 
 from sklearn.preprocessing import StandardScaler
 
-EPOCHS = 10
-DATA_SAMPLE = 10000
+EPOCHS = 1
+DATA_SAMPLE = 1000
+DATA_VAL = 50
 
 def init_data(stocks_path):
     dirs = os.listdir(stocks_path)
@@ -42,11 +43,10 @@ def create_model():
     model = tensorflow.keras.Model(inputs=input_layer,outputs=output)
     return (model)
 
-def print_results(history):
-    #printing loss functions
-    loss_curve = history.history["loss"]
-    matplotlib.pyplot.plot(loss_curve)
-    matplotlib.pyplot.title("Loss")
+def print_predict(predict, real):
+    #printing predict
+    matplotlib.pyplot.plot(predict, 'r', real, 'b:')
+    matplotlib.pyplot.title("Predict")
     matplotlib.pyplot.show()
 
 def predict_on_stocks(stocks_path: str, store_path: str, models_path: str):
@@ -59,6 +59,7 @@ def predict_on_stocks(stocks_path: str, store_path: str, models_path: str):
         loss="mean_squared_error",
         optimizer=tensorflow.keras.optimizers.Adam(0.1),
     )
-
-    history = model.fit(open_data[0:DATA_SAMPLE - 1000], close_data[0:DATA_SAMPLE - 1000], epochs=EPOCHS)
-    print_results(history)
+    history = model.fit(open_data[0:DATA_SAMPLE - DATA_VAL], close_data[0:DATA_SAMPLE - DATA_VAL], epochs=EPOCHS)
+    predict = model.predict(open_data[DATA_SAMPLE - DATA_VAL:DATA_SAMPLE])
+    real = close_data[DATA_SAMPLE - DATA_VAL:DATA_SAMPLE]
+    print_predict(predict, real)
