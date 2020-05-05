@@ -61,7 +61,7 @@ def predict_on_stocks(stocks_path: str, store_path: str, models_path: str):
         optimizer=tensorflow.keras.optimizers.Adam(0.1),
     )
     history = model.fit(open_data[0:DATA_SAMPLE - DATA_VAL], close_data[0:DATA_SAMPLE - DATA_VAL], epochs=EPOCHS)
-    predict = model.predict(close_data[DATA_SAMPLE - DATA_VAL: DATA_SAMPLE])
+    predict = model.predict(open_data[DATA_SAMPLE - DATA_VAL: DATA_SAMPLE])
     real = close_data[DATA_SAMPLE - DATA_VAL:DATA_SAMPLE]
     print(real)
     print("\n\n")
