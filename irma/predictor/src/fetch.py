@@ -55,10 +55,10 @@ def download_stocks(companies_path: str, dl_path: str, proxies_path: str = None,
             if proxies_path is not None:
                 proxy = rchoice(proxies)
                 print(f'{i} - Downloading {symbol} on proxy {proxy} ...')
-                stock = yf.download(symbol, proxy=proxy)
+                stock = yf.download(symbol, proxy=proxy, period='max', interval='1d')
             else:
                 print(f'{i} - Downloading {symbol} on proxy 0.0.0.0 ...')
-                stock = yf.download(symbol)
+                stock = yf.download(symbol, period='max', interval='1d')
 
             if stock.shape[0] > 2:
                 stock.to_csv(stock_name)
