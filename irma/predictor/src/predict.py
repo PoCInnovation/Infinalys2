@@ -45,7 +45,8 @@ def create_model():
 
 def print_predict(predict, real):
     #printing predict
-    matplotlib.pyplot.plot(predict, 'r', real, 'b:')
+    matplotlib.pyplot.plot(predict, 'r')
+    matplotlib.pyplot.plot(real, 'b:')
     matplotlib.pyplot.title("Predict")
     matplotlib.pyplot.show()
 
