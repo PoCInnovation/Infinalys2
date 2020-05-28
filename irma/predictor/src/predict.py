@@ -85,10 +85,7 @@ def predict_on_stocks(stocks_path: str, store_path: str, models_path: str):
     #TenserBoard
     log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     tensorboard_callback = tensorflow.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
-    model.fit(x_train,
-              y_train,
-              epochs=EPOCHS,
-              callbacks=[tensorboard_callback])
+    model.fit(x_train, y_train, epochs=EPOCHS, callbacks=[tensorboard_callback])
     predicted_data = model.predict(x_test)
     real_data = y_test
     #predicted_data, real_data = denormalize_data(predicted_data, real_data, scaler)
