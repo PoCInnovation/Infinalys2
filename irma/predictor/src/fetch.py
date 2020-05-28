@@ -18,7 +18,7 @@ def _get_proxies(path: str) -> list:
         return proxies
 
 
-def download_stocks(companies_path: str, dl_path: str, proxies_path: str = None, max_dl: int = 0):
+def download_stocks(companies_path: str, dl_path: str, proxies_path: str = None, max_dl: int = 0, interval_arg: str = '1d'):
     """Fetches stocks csv's on yahoo finance.
 
     Args:
@@ -37,15 +37,17 @@ def download_stocks(companies_path: str, dl_path: str, proxies_path: str = None,
         >>> download_stocks('./companies/list.csv', './store', max_dl=100)
     """
     assert max_dl >= 0, 'Argument max_dl must be >= 0.'
+    if interval_arg != "1d" and interval_arg != "5d" and interval_arg != "1mo": 
+        print("Argument interval_arg must be either \'1d\', either \'5d\', either \'1mo\'")
+        return
 
     if proxies_path is not None:
         proxies = _get_proxies(proxies_path)
 
     downloads = 0
     with open(companies_path, 'r') as file:
-        file.readline()
+        file.readline() 
         for i, row in enumerate(file):
-
             symbol = row.split(',')[0].strip('\n')
             stock_name = os.path.join(dl_path, symbol + '.csv')
 
@@ -55,11 +57,10 @@ def download_stocks(companies_path: str, dl_path: str, proxies_path: str = None,
             if proxies_path is not None:
                 proxy = rchoice(proxies)
                 print(f'{i} - Downloading {symbol} on proxy {proxy} ...')
-                stock = yf.download(symbol, proxy=proxy, period='max', interval='1d')
+                stock = yf.download(symbol, proxy=proxy, period='max', interval = interval_arg)
             else:
                 print(f'{i} - Downloading {symbol} on proxy 0.0.0.0 ...')
-                stock = yf.download(symbol, period='max', interval='1d')
-
+                stock = yf.download(symbol, period='max', interval = interval_arg)
             if stock.shape[0] > 2:
                 stock.to_csv(stock_name)
                 downloads += 1
@@ -68,5 +69,4 @@ def download_stocks(companies_path: str, dl_path: str, proxies_path: str = None,
 
             if max_dl != 0 and downloads - 1 == max_dl:
                 break
-
         print(f'Downloaded {downloads} stocks.')
