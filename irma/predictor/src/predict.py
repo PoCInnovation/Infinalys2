@@ -2,6 +2,7 @@
 import matplotlib.pyplot
 # Tensorflow
 import tensorflow
+import datetime
 # Numpy and Pandas
 import numpy
 import pandas
@@ -17,7 +18,7 @@ DATA_SAMPLE = 1000
 
 def init_data(stocks_path):
     dirs = os.listdir(stocks_path)
-    file = dirs[2]
+    file = dirs[1]
     data = pandas.read_csv(os.path.join(stocks_path, file)).to_numpy()
     open_data = []
     close_data = []
@@ -80,7 +81,14 @@ def predict_on_stocks(stocks_path: str, store_path: str, models_path: str):
     x_train, x_test, y_train, y_test = train_test_split(open_data, close_data, test_size=0.10, random_state=42)
 
     model = create_model()
-    model.fit(x_train, y_train, epochs=EPOCHS)
+
+    #TenserBoard
+    log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    tensorboard_callback = tensorflow.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+    model.fit(x_train,
+              y_train,
+              epochs=EPOCHS,
+              callbacks=[tensorboard_callback])
     predicted_data = model.predict(x_test)
     real_data = y_test
     #predicted_data, real_data = denormalize_data(predicted_data, real_data, scaler)
