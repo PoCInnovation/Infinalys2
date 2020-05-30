@@ -53,7 +53,8 @@ def denormalize_data(x_array, y_array, scaler):
 
 def create_model():
     model = tensorflow.keras.models.Sequential()
-    model.add(tensorflow.keras.layers.Dense(5, input_shape=(1,)))
+    model.add(tensorflow.keras.layers.Dense(20, input_shape=(1,)))
+    model.add(tensorflow.keras.layers.Dense(20, input_shape=(1,)))
     model.add(tensorflow.keras.layers.Dense(1, input_shape=(1,)))
     '''input_layer = tensorflow.keras.layers.Input((1, ))
     dense1_layer = tensorflow.keras.layers.Dense(units=1, input_shape=(1,))
@@ -69,22 +70,22 @@ def create_model():
     #EndTenserBoard
     return (model, tensorboard_callback)
 
-def print_predict(predict, real):
+def print_predict(predict, real, x_test):
     """printing predict"""
+    '''use x_test in plot if you want the comparative plot'''
     matplotlib.pyplot.plot(predict, 'r')
-    matplotlib.pyplot.plot(real, 'b:')
+    matplotlib.pyplot.plot(real, 'b')
     matplotlib.pyplot.title('Predict')
     matplotlib.pyplot.xlabel('Days')
     matplotlib.pyplot.ylabel('Close Price')
     matplotlib.pyplot.show()
-    '''data = [predict, real]
-    pandas.DataFrame(predict).T.plot()
-    pandas.DataFrame(real).T.plot()'''
 
-def test_prediction(model, x_test, y_test):
+def test_prediction(model, x_test, y_test, scaler):
     predicted_data = model.predict(x_test)
-    real_data = y_test
-    print_predict(predicted_data, real_data)
+
+    predicted_data, real_data = denormalize_data(predicted_data, y_test, scaler)
+    x_test, x_test = denormalize_data(x_test, x_test, scaler)
+    print_predict(predicted_data, real_data, x_test)
 
 def predict_on_stocks(stocks_path: str, store_path: str, models_path: str):
     scaler = StandardScaler()
@@ -98,6 +99,5 @@ def predict_on_stocks(stocks_path: str, store_path: str, models_path: str):
     model, tensorboard_callback = create_model()
     model.fit(x_train, y_train, epochs=EPOCHS, callbacks=[tensorboard_callback])
 
-    x_test, y_test = denormalize_data(x_test, y_test, scaler)
-    test_prediction(model, x_test, y_test)
+    test_prediction(model, x_test, y_test, scaler)
 
