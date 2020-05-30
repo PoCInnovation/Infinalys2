@@ -47,8 +47,8 @@ def create_results(stocks_path: str, preds_path: str, results_path: str):
 
 def main(argv):
     download_stocks(TEST_COMPANIES_PATH, STOCKS_PATH, max_dl=100, interval_arg=argv[0])
-    manage_stocks(STOCKS_PATH)
-    # predict_on_stocks(STOCKS_PATH, PREDICTIONS_PATH, MODELS_PATH)
+    # manage_stocks(STOCKS_PATH)
+    predict_on_stocks(STOCKS_PATH, PREDICTIONS_PATH, MODELS_PATH)
     # create_results(STOCKS_PATH, PREDICTIONS_PATH, RESULT_PATH)
 
 if __name__ == "__main__":
