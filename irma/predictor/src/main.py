@@ -45,11 +45,19 @@ def create_results(stocks_path: str, preds_path: str, results_path: str):
         with open(result_path, 'w') as fp:
             json.dump(result, fp)
 
-def main(argv):
-    download_stocks(TEST_COMPANIES_PATH, STOCKS_PATH, max_dl=100, interval_arg=argv[0])
-    # manage_stocks(STOCKS_PATH)
-    predict_on_stocks(STOCKS_PATH, PREDICTIONS_PATH, MODELS_PATH)
-    # create_results(STOCKS_PATH, PREDICTIONS_PATH, RESULT_PATH)
+def main():
+    if (len(sys.argv) == 2):
+        print("ON A UN ARG")
+        download_stocks(TEST_COMPANIES_PATH, STOCKS_PATH, max_dl = 100, interval_arg = sys.argv[1])
+        # manage_stocks(STOCKS_PATH)
+        # predict_on_stocks(STOCKS_PATH, PREDICTIONS_PATH, MODELS_PATH)
+        # create_results(STOCKS_PATH, PREDICTIONS_PATH, RESULT_PATH)
+    else:
+        print("PAS D'ARG DONC ONE DAY")
+        download_stocks(TEST_COMPANIES_PATH, STOCKS_PATH, max_dl = 100, interval_arg = '1d')
+        # manage_stocks(STOCKS_PATH)
+        # predict_on_stocks(STOCKS_PATH, PREDICTIONS_PATH, MODELS_PATH)
+        # create_results(STOCKS_PATH, PREDICTIONS_PATH, RESULT_PATH)
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
