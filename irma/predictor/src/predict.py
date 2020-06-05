@@ -16,17 +16,12 @@ from sklearn.model_selection import train_test_split
 EPOCHS = 10
 DATA_SAMPLE = 100
 
-def init_data(stocks_path):
-    dirs = os.listdir(stocks_path)
-    file = dirs[1]
-    print(file)
-    data = pandas.read_csv(os.path.join(stocks_path, file)).to_numpy()
+def init_data(array):
     open_data = []
     close_data = []
     for i in range(DATA_SAMPLE):
-        open_data.append(data[i][1])
-    for i in range(DATA_SAMPLE):
-        close_data.append(data[i][4])
+        open_data.append(array[i][1])
+        close_data.append(array[i][4])
     open_data = numpy.asarray(open_data)
     close_data = numpy.asarray(close_data)
     return (open_data, close_data)
@@ -56,10 +51,6 @@ def create_model():
     model.add(tensorflow.keras.layers.Dense(20, input_shape=(1,)))
     model.add(tensorflow.keras.layers.Dense(20, input_shape=(1,)))
     model.add(tensorflow.keras.layers.Dense(1, input_shape=(1,)))
-    '''input_layer = tensorflow.keras.layers.Input((1, ))
-    dense1_layer = tensorflow.keras.layers.Dense(units=1, input_shape=(1,))
-    output = dense1_layer(input_layer)
-    model = tensorflow.keras.Model(inputs=input_layer, outputs=output)'''
     model.compile(
         loss="mean_squared_error",
         optimizer=tensorflow.keras.optimizers.Adam(0.1),
@@ -87,9 +78,9 @@ def test_prediction(model, x_test, y_test, scaler):
     x_test, x_test = denormalize_data(x_test, x_test, scaler)
     print_predict(predicted_data, real_data, x_test)
 
-def predict_on_stocks(stocks_path: str, store_path: str, models_path: str):
+def predict_on_stocks(array: numpy.array, store_path: str, models_path: str):
     scaler = StandardScaler()
-    open_data, close_data = init_data(stocks_path)
+    open_data, close_data = init_data(array)
 
     open_data, close_data = normalize_data(open_data, close_data, scaler)
     x_train, x_test, y_train, y_test = train_test_split(

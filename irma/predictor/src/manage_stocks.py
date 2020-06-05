@@ -10,7 +10,7 @@ def add_indicator(array, values):
     for i in range(array.shape[0]):
         bools.append(values[i])
     array = numpy.array(array)
-    array.resize((5, array.shape[1] + 1))
+    array.resize((array.shape[0], array.shape[1] + 1))
     for i in range(array.shape[0]):
         array[i][array.shape[1] - 1] = bools[i]
     return array
