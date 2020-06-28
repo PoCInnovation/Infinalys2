@@ -1,3 +1,6 @@
+# Ohter import
+import sys
+import os
 # Matplotlib
 import matplotlib.pyplot
 # Tensorflow
@@ -6,30 +9,38 @@ import datetime
 # Numpy and Pandas
 import numpy
 import pandas
-# Ohter import
-import sys
-import os
+import math
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
 EPOCHS = 10
-DATA_SAMPLE = 100
+DATA_SAMPLE = 1000
+
+def erase_nan(array):
+    size = 0
+    i = -1
+    while 1:
+        i += 1
+        if math.isnan(array[i][8]) is True:
+            size += 1
+        else:
+            break
+    return size
 
 def init_data(array):
-    open_data = []
     close_data = []
+    size = erase_nan(array)
     for i in range(DATA_SAMPLE):
-        open_data.append(array[i][1])
-        close_data.append(array[i][4])
-    open_data = numpy.asarray(open_data)
+        close_data.append(array[i + size][4])
+        array[i + size][4] = 0
     close_data = numpy.asarray(close_data)
-    return (open_data, close_data)
+    array = array[size : DATA_SAMPLE + size]
+    return (array, close_data)
 
 def normalize_data(x_array, y_array, scaler):
-    x_array = numpy.reshape(x_array, (-1, 1))
+    x_array = numpy.reshape(x_array, (-1, 9))
     x_array = scaler.fit_transform(x_array)
-    x_array = numpy.ndarray.flatten(x_array)
 
     y_array = numpy.reshape(y_array, (-1, 1))
     y_array = scaler.fit_transform(y_array)
@@ -48,8 +59,8 @@ def denormalize_data(x_array, y_array, scaler):
 
 def create_model():
     model = tensorflow.keras.models.Sequential()
-    model.add(tensorflow.keras.layers.Dense(20, input_shape=(1,)))
-    model.add(tensorflow.keras.layers.Dense(20, input_shape=(1,)))
+    model.add(tensorflow.keras.layers.Dense(20, input_shape=(9,)))
+    model.add(tensorflow.keras.layers.Dense(20, input_shape=(20,)))
     model.add(tensorflow.keras.layers.Dense(1, input_shape=(1,)))
     model.compile(
         loss="mean_squared_error",
@@ -83,12 +94,17 @@ def predict_on_stocks(array: numpy.array, store_path: str, models_path: str):
     open_data, close_data = init_data(array)
 
     open_data, close_data = normalize_data(open_data, close_data, scaler)
-    x_train, x_test, y_train, y_test = train_test_split(
+    """x_train, x_test, y_train, y_test = train_test_split(
         open_data, close_data, test_size=0.10, random_state=42
-    )
+    )"""
 
+    x_train = open_data[0 : int(DATA_SAMPLE * 0.9)]
+    y_train = close_data[0 : int(DATA_SAMPLE * 0.9)]
+    x_test = open_data[int(DATA_SAMPLE * 0.9) : DATA_SAMPLE]
+    y_test = close_data[int(DATA_SAMPLE * 0.9) : DATA_SAMPLE]
+
+    #print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
     model, tensorboard_callback = create_model()
     model.fit(x_train, y_train, epochs=EPOCHS, callbacks=[tensorboard_callback])
 
     test_prediction(model, x_test, y_test, scaler)
-

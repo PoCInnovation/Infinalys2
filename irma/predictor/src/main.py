@@ -55,5 +55,6 @@ def main():
         stocks = manage_stocks(STOCKS_PATH)
         predict_on_stocks(stocks, PREDICTIONS_PATH, MODELS_PATH)
         # create_results(STOCKS_PATH, PREDICTIONS_PATH, RESULT_PATH)
+
 if __name__ == "__main__":
     main()
