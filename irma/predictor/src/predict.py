@@ -8,21 +8,23 @@ import tensorflow
 import datetime
 # Numpy and Pandas
 import numpy
+numpy.set_printoptions(threshold=sys.maxsize)
 import pandas
 import math
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-EPOCHS = 10
+EPOCHS = 20
 DATA_SAMPLE = 1000
+NB_INDICATORS = 10
 
 def erase_nan(array):
     size = 0
     i = -1
     while 1:
         i += 1
-        if math.isnan(array[i][8]) is True:
+        if math.isnan(array[i][NB_INDICATORS - 1]) is True:
             size += 1
         else:
             break
@@ -33,13 +35,13 @@ def init_data(array):
     size = erase_nan(array)
     for i in range(DATA_SAMPLE):
         close_data.append(array[i + size][4])
-        array[i + size][4] = 0
     close_data = numpy.asarray(close_data)
     array = array[size : DATA_SAMPLE + size]
+    array = numpy.delete(array, 4, 1)
     return (array, close_data)
 
 def normalize_data(x_array, y_array, scaler):
-    x_array = numpy.reshape(x_array, (-1, 9))
+    x_array = numpy.reshape(x_array, (-1, NB_INDICATORS - 1))
     x_array = scaler.fit_transform(x_array)
 
     y_array = numpy.reshape(y_array, (-1, 1))
@@ -59,9 +61,10 @@ def denormalize_data(x_array, y_array, scaler):
 
 def create_model():
     model = tensorflow.keras.models.Sequential()
-    model.add(tensorflow.keras.layers.Dense(20, input_shape=(9,)))
-    model.add(tensorflow.keras.layers.Dense(20, input_shape=(20,)))
-    model.add(tensorflow.keras.layers.Dense(1, input_shape=(1,)))
+    model.add(tensorflow.keras.layers.Dense(256, input_shape=(NB_INDICATORS - 1,)))
+    model.add(tensorflow.keras.layers.Dense(64))
+    model.add(tensorflow.keras.layers.Dense(32))
+    model.add(tensorflow.keras.layers.Dense(1))
     model.compile(
         loss="mean_squared_error",
         optimizer=tensorflow.keras.optimizers.Adam(0.1),
@@ -73,6 +76,10 @@ def create_model():
     return (model, tensorboard_callback)
 
 def print_predict(predict, real, x_test):
+    print('predict:')
+    print(predict)
+    print('real:')
+    print (real)
     """printing predict"""
     '''use x_test in plot if you want the comparative plot'''
     matplotlib.pyplot.plot(predict, 'r')
@@ -98,12 +105,16 @@ def predict_on_stocks(array: numpy.array, store_path: str, models_path: str):
         open_data, close_data, test_size=0.10, random_state=42
     )"""
 
+    '''here I am splitting the data by myself,
+    taking the first 90% for the training dataset and the last 10% for the test dataset'''
     x_train = open_data[0 : int(DATA_SAMPLE * 0.9)]
     y_train = close_data[0 : int(DATA_SAMPLE * 0.9)]
     x_test = open_data[int(DATA_SAMPLE * 0.9) : DATA_SAMPLE]
     y_test = close_data[int(DATA_SAMPLE * 0.9) : DATA_SAMPLE]
 
     #print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
+    '''in this function, the model takes NB_INDICATORS - 1 columns
+    and try to predict one data (in this spot the close price of the daily candle)'''
     model, tensorboard_callback = create_model()
     model.fit(x_train, y_train, epochs=EPOCHS, callbacks=[tensorboard_callback])
 

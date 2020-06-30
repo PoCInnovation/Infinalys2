@@ -3,7 +3,7 @@ import pandas
 import numpy
 from stockstats import StockDataFrame
 
-INDICATORS = ['change', 'boll_ub', 'boll_lb']
+INDICATORS = ['change', 'boll_ub', 'boll_lb', 'rsi_6']
 
 def add_indicator(array, values):
     bools = []

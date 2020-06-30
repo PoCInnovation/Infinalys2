@@ -37,7 +37,7 @@ def download_stocks(companies_path: str, dl_path: str, proxies_path: str = None,
         >>> download_stocks('./companies/list.csv', './store', max_dl=100)
     """
     assert max_dl >= 0, 'Argument max_dl must be >= 0.'
-    if interval_arg != "1d" and interval_arg != "5d" and interval_arg != "1mo": 
+    if interval_arg != "1d" and interval_arg != "5d" and interval_arg != "1mo":
         print("Argument interval_arg must be either \'1d\', either \'5d\', either \'1mo\'")
         return
 
@@ -46,7 +46,7 @@ def download_stocks(companies_path: str, dl_path: str, proxies_path: str = None,
 
     downloads = 0
     with open(companies_path, 'r') as file:
-        file.readline() 
+        file.readline()
         for i, row in enumerate(file):
             symbol = row.split(',')[0].strip('\n')
             stock_name = os.path.join(dl_path, symbol + '.csv')

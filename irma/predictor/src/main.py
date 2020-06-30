@@ -50,7 +50,7 @@ def main():
             TEST_COMPANIES_PATH,
             STOCKS_PATH,
             max_dl = 100,
-            interval_arg = sys.argv[1] if (sys.argv == '5d' or sys.argv == '1mo') else '1d'
+            interval_arg = sys.argv[1] if (sys.argv[1] == "5d" or sys.argv[1] == "1mo") else "1d"
         )
         stocks = manage_stocks(STOCKS_PATH)
         predict_on_stocks(stocks, PREDICTIONS_PATH, MODELS_PATH)
