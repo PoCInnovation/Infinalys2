@@ -37,9 +37,6 @@ def download_stocks(companies_path: str, dl_path: str, proxies_path: str = None,
         >>> download_stocks('./companies/list.csv', './store', max_dl=100)
     """
     assert max_dl >= 0, 'Argument max_dl must be >= 0.'
-    if interval_arg != "1d" and interval_arg != "5d" and interval_arg != "1mo":
-        print("Argument interval_arg must be either \'1d\', either \'5d\', either \'1mo\'")
-        return
 
     if proxies_path is not None:
         proxies = _get_proxies(proxies_path)

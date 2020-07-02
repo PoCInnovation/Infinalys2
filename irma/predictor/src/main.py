@@ -46,15 +46,18 @@ def create_results(stocks_path: str, preds_path: str, results_path: str):
             json.dump(result, fp)
 
 def main():
-        download_stocks(
-            TEST_COMPANIES_PATH,
-            STOCKS_PATH,
-            max_dl = 100,
-            interval_arg = sys.argv[1] if (sys.argv[1] == "5d" or sys.argv[1] == "1mo") else "1d"
-        )
-        stocks = manage_stocks(STOCKS_PATH)
-        predict_on_stocks(stocks, PREDICTIONS_PATH, MODELS_PATH)
-        # create_results(STOCKS_PATH, PREDICTIONS_PATH, RESULT_PATH)
+    if len(sys.argv) == 2 and sys.argv[1] != "1d" and sys.argv[1] != "5d" and sys.argv[1] != "1mo":
+        print("Argument interval_arg must be either \'1d\', either \'5d\', either \'1mo\'")
+        return
+    download_stocks(
+        TEST_COMPANIES_PATH,
+        STOCKS_PATH,
+        max_dl = 100,
+        interval_arg = "1d" if (len(sys.argv) != 2 or (sys.argv[1] != "5d" and sys.argv[1] != "1mo")) else sys.argv[1]
+    )
+    stocks = manage_stocks(STOCKS_PATH)
+    predict_on_stocks(stocks, PREDICTIONS_PATH, MODELS_PATH)
+    # create_results(STOCKS_PATH, PREDICTIONS_PATH, RESULT_PATH)
 
 if __name__ == "__main__":
     main()
