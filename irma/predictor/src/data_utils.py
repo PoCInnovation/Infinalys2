@@ -5,7 +5,7 @@ import math
 import tensorflow
 
 # Globals
-DATA_SAMPLE = 1000
+DATA_SAMPLE = 2122
 NB_INDICATORS = 10
 
 def erase_nan(array):
@@ -49,7 +49,7 @@ def denormalize_data(x_array, y_array, scaler):
     return (x_array, y_array)
 
 def split_data(open_data: numpy.array, close_data: numpy.array):
-    x_train = open_data[0 : int(DATA_SAMPLE * 0.8)],
+    x_train = open_data[0 : int(DATA_SAMPLE * 0.8)]
     y_train = close_data[0 : int(DATA_SAMPLE * 0.8)]
     x_test = open_data[int(DATA_SAMPLE * 0.8) : DATA_SAMPLE]
     y_test = close_data[int(DATA_SAMPLE * 0.8) : DATA_SAMPLE]

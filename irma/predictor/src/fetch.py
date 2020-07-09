@@ -18,52 +18,35 @@ def _get_proxies(path: str) -> list:
         return proxies
 
 
-def download_stocks(companies_path: str, dl_path: str, proxies_path: str = None, max_dl: int = 0, interval_arg: str = '1d'):
+def download_stocks(symbol: str = None, dl_path: str = None, proxies_path: str = None, interval_arg: str = None):
     """Fetches stocks csv's on yahoo finance.
-
     Args:
-        companies_path: Represents the filepath to the file listing the
-            companies name (ticker name). It's waiting for a csv, and
-            will read the first column.
+        symbol: Symbol of the stock to be downloaded
         dl_path: Filepath to indicate where to store the downloaded stocks.
         proxies_path: Filepath to indicate the proxies to take
-        max_dl: Maximun number of files to download, 0 if there is no limit
-
-    Example:
-
-        This example will download at most 100 csv stock files on yahoo
-        finance and store them in `./store/`.
-
-        >>> download_stocks('./companies/list.csv', './store', max_dl=100)
+        interval_arg: Interval of the stock to be downloaded
     """
-    assert max_dl >= 0, 'Argument max_dl must be >= 0.'
 
+    stock_path = f'{dl_path}/{symbol}.csv'
+    if os.path.isfile(stock_path) == True:
+        return stock_path
     if proxies_path is not None:
         proxies = _get_proxies(proxies_path)
 
-    downloads = 0
-    with open(companies_path, 'r') as file:
-        file.readline()
-        for i, row in enumerate(file):
-            symbol = row.split(',')[0].strip('\n')
-            stock_name = os.path.join(dl_path, symbol + '.csv')
+    stock_name = os.path.join(dl_path, symbol + '.csv')
 
-            if os.path.exists(stock_name):
-                continue
+    if proxies_path is not None:
+        proxy = rchoice(proxies)
+        print(f'Downloading {symbol} on proxy {proxy} ...')
+        stock = yf.download(symbol, proxy=proxy, period='max', interval = interval_arg)
+    else:
+        print(f'Downloading {symbol} on proxy 0.0.0.0 ...')
+        stock = yf.download(symbol, period='max', interval = interval_arg)
 
-            if proxies_path is not None:
-                proxy = rchoice(proxies)
-                print(f'{i} - Downloading {symbol} on proxy {proxy} ...')
-                stock = yf.download(symbol, proxy=proxy, period='max', interval = interval_arg)
-            else:
-                print(f'{i} - Downloading {symbol} on proxy 0.0.0.0 ...')
-                stock = yf.download(symbol, period='max', interval = interval_arg)
-            if stock.shape[0] > 2:
-                stock.to_csv(stock_name)
-                downloads += 1
-            else:
-                print(f'Couldn\'t download stock {symbol}')
-
-            if max_dl != 0 and downloads - 1 == max_dl:
-                break
-        print(f'Downloaded {downloads} stocks.')
+    if stock.shape[0] > 2:
+        stock.to_csv(stock_name)
+        print(f'Successfully Downloaded stock {symbol} !')
+        return stock_path
+    else:
+        print(f'Couldn\'t download stock {symbol}')
+        return None

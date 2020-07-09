@@ -18,7 +18,6 @@ from sklearn.model_selection import train_test_split
 from data_utils import *
 
 EPOCHS = 20
-DATA_SAMPLE = 1000
 NB_INDICATORS = 10
 
 def create_model():
@@ -37,10 +36,6 @@ def create_model():
     return (model, tensorboard_callback)
 
 def print_predict(predict, real, x_test):
-    print('predict:')
-    print(predict)
-    print('real:')
-    print (real)
     """printing predict"""
     '''use x_test in plot if you want the comparative plot'''
     matplotlib.pyplot.plot(predict, 'r')
@@ -57,7 +52,6 @@ def test_prediction(model, x_test, y_test, scaler):
     print_predict(predicted_data, real_data, x_test)
 
 
-
 def predict_on_stocks(array: numpy.array, store_path: str, models_path: str):
     scaler = StandardScaler()
     open_data, close_data = init_data(array)
@@ -67,10 +61,9 @@ def predict_on_stocks(array: numpy.array, store_path: str, models_path: str):
     (x_train, y_train, x_test, y_test) = split_data(open_data, close_data)
     (x_train, y_train) = shuffle_data(x_train, y_train)
 
-    print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
+    #print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
     '''in this function, the model takes NB_INDICATORS - 1 columns
     and try to predict one data (in this spot the close price of the daily candle)'''
     model, tensorboard_callback = create_model()
     model.fit(x_train, y_train, batch_size=128, epochs=EPOCHS, callbacks=[tensorboard_callback])
-
     test_prediction(model, x_test, y_test, scaler)

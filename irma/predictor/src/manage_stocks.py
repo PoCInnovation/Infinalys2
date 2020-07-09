@@ -15,12 +15,10 @@ def add_indicator(array, values):
         array[i][array.shape[1] - 1] = bools[i]
     return array
 
-def manage_stocks(stocks_path: str):
-    file = os.listdir(stocks_path)[1]
-    stock = pandas.read_csv(os.path.join(stocks_path, file))
+def manage_stocks(stock_path: str):
+    stock = pandas.read_csv(stock_path)
     stock_stats = StockDataFrame.retype(stock)
     array = stock.to_numpy()
     for i in range(len(INDICATORS)):
         array = add_indicator(array, stock_stats.get(INDICATORS[i]).to_numpy())
-    numpy.set_printoptions(formatter={'float': '{: 0.5f}'.format})
     return array

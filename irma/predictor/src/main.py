@@ -5,19 +5,20 @@ import os
 import sys
 import json
 import pandas
+
+from pprint import pprint
+
 from fetch import download_stocks
 from manage_stocks import manage_stocks
 from predict import predict_on_stocks
 
-COMPANIES_PATH = "../assets/companies.csv"
-TEST_COMPANIES_PATH = "../assets/companies_test.csv"
 PROXIES_PATH = "../assets/proxy_list.txt"
 PREDICTIONS_PATH = "./predictions"
 MODELS_PATH = "./models"
 STOCKS_PATH = "./stocks"
 RESULT_PATH = "/tmp"
+USAGE = "\nInfinalys: A.I. to make predictions on stocks\n\nUSAGE\n\t./main.py (stock) (interval)\n\tstock: stock symbol to be downloaded\n\tinterval: interval of the stock to be downloaded\n\nEXAMPLE\n\t./main.py APPL 1d "
 
-from pprint import pprint
 def create_results(stocks_path: str, preds_path: str, results_path: str):
     dirs = os.listdir(stocks_path)
     for file in dirs:
@@ -45,17 +46,22 @@ def create_results(stocks_path: str, preds_path: str, results_path: str):
         with open(result_path, 'w') as fp:
             json.dump(result, fp)
 
-def main():
-    if len(sys.argv) == 2 and sys.argv[1] != "1d" and sys.argv[1] != "5d" and sys.argv[1] != "1mo":
+def error_handling_arguments(argv: list):
+    if len(sys.argv) != 3:
+        print(USAGE)
+        return True
+    if sys.argv[2] != "1d" and sys.argv[2] != "5d" and sys.argv[2] != "1mo":
         print("Argument interval_arg must be either \'1d\', either \'5d\', either \'1mo\'")
+        return True
+    return False
+
+def main():
+    if error_handling_arguments(sys.argv) == True:
         return
-    download_stocks(
-        TEST_COMPANIES_PATH,
-        STOCKS_PATH,
-        max_dl = 100,
-        interval_arg = "1d" if (len(sys.argv) != 2 or (sys.argv[1] != "5d" and sys.argv[1] != "1mo")) else sys.argv[1]
-    )
-    stocks = manage_stocks(STOCKS_PATH)
+    stock_path = download_stocks(sys.argv[1], STOCKS_PATH, None, sys.argv[2])
+    if stock_path is None:
+        return
+    stocks = manage_stocks(stock_path)
     predict_on_stocks(stocks, PREDICTIONS_PATH, MODELS_PATH)
     # create_results(STOCKS_PATH, PREDICTIONS_PATH, RESULT_PATH)
 
