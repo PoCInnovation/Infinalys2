@@ -18,11 +18,14 @@ from sklearn.model_selection import train_test_split
 from data_utils import *
 
 EPOCHS = 20
-NB_INDICATORS = 10
+NB_INDICATORS = 15
 
-def create_model():
+def create_model(x_train):
     model = tensorflow.keras.models.Sequential()
+    print(f'x_train shape: {x_train.shape}')
+    #model.add(tensorflow.keras.layers.LSTM(256, input_shape=(NB_INDICATORS - 1,), return_sequences=True))
     model.add(tensorflow.keras.layers.Dense(256, input_shape=(NB_INDICATORS - 1,)))
+    model.add(tensorflow.keras.layers.Dense(64))
     model.add(tensorflow.keras.layers.Dense(32))
     model.add(tensorflow.keras.layers.Dense(1))
     model.compile(
@@ -64,6 +67,6 @@ def predict_on_stocks(array: numpy.array, store_path: str, models_path: str):
     #print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
     '''in this function, the model takes NB_INDICATORS - 1 columns
     and try to predict one data (in this spot the close price of the daily candle)'''
-    model, tensorboard_callback = create_model()
+    model, tensorboard_callback = create_model(x_train)
     model.fit(x_train, y_train, batch_size=128, epochs=EPOCHS, callbacks=[tensorboard_callback])
     test_prediction(model, x_test, y_test, scaler)
