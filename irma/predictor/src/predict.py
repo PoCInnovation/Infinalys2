@@ -19,14 +19,15 @@ from data_utils import *
 
 EPOCHS = 20
 NB_INDICATORS = 15
+BATCH_SIZE = 1
 
 def create_model(x_train):
     model = tensorflow.keras.models.Sequential()
-    print(f'x_train shape: {x_train.shape}')
-    #model.add(tensorflow.keras.layers.LSTM(256, input_shape=(NB_INDICATORS - 1,), return_sequences=True))
-    model.add(tensorflow.keras.layers.Dense(256, input_shape=(NB_INDICATORS - 1,)))
+
+    #model.add(tensorflow.keras.layers.LSTM(256))
+    model.add(tensorflow.keras.layers.Dense(256))
+    model.add(tensorflow.keras.layers.Dense(128))
     model.add(tensorflow.keras.layers.Dense(64))
-    model.add(tensorflow.keras.layers.Dense(32))
     model.add(tensorflow.keras.layers.Dense(1))
     model.compile(
         loss="mean_squared_error",
@@ -63,6 +64,11 @@ def predict_on_stocks(array: numpy.array, store_path: str, models_path: str):
 
     (x_train, y_train, x_test, y_test) = split_data(open_data, close_data)
     (x_train, y_train) = shuffle_data(x_train, y_train)
+
+    #x_train = numpy.reshape(x_train, (-1, BATCH_SIZE, NB_INDICATORS - 1))
+    #x_test = numpy.reshape(x_test, (-1, BATCH_SIZE, NB_INDICATORS - 1))
+    #y_train = numpy.reshape(y_train, (-1, BATCH_SIZE))
+    #y_test = numpy.reshape(y_test, (-1, BATCH_SIZE))
 
     #print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
     '''in this function, the model takes NB_INDICATORS - 1 columns

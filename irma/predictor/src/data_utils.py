@@ -5,29 +5,31 @@ import math
 import tensorflow
 
 # Globals
-DATA_SAMPLE = 2000
 NB_INDICATORS = 15
 
-def erase_nan(array):
-    size = 0
-    i = -1
-    while 1:
-        i += 1
-        if math.isnan(array[i][NB_INDICATORS - 1]) is True:
-            size += 1
-        else:
-            break
-    return size
+def have_one_nan(array: numpy.array, line: int):
+    for i in range(NB_INDICATORS):
+        if math.isnan(array[line][i]) is True:
+            return True
+    return False
 
 def init_data(array):
     close_data = []
-    size = erase_nan(array)
-    for i in range(DATA_SAMPLE):
-        close_data.append(array[i + size][4])
+    for i in range(len(array)):
+        if i >= len(array):
+            break
+        if have_one_nan(array, i) is True:
+            array = numpy.delete(array, i, axis=0)
+            i -= 1
+    for i in range(len(array)):
+        close_data.append(array[i][4])
     close_data = numpy.asarray(close_data)
-    array = array[size : DATA_SAMPLE + size]
     array = numpy.delete(array, 4, 1)
     return (array, close_data)
+#print(array.shape)
+#print(close_data.shape)
+#print('array:', array)
+#print('close_data:', close_data)
 
 def normalize_data(x_array, y_array, scaler):
     x_array = numpy.reshape(x_array, (-1, NB_INDICATORS - 1))
@@ -49,15 +51,15 @@ def denormalize_data(x_array, y_array, scaler):
     return (x_array, y_array)
 
 def split_data(open_data: numpy.array, close_data: numpy.array):
-    x_train = open_data[0 : int(DATA_SAMPLE * 0.9)]
-    y_train = close_data[0 : int(DATA_SAMPLE * 0.9)]
-    x_test = open_data[int(DATA_SAMPLE * 0.9) : DATA_SAMPLE]
-    y_test = close_data[int(DATA_SAMPLE * 0.9) : DATA_SAMPLE]
+    x_train = open_data[0 : int(len(open_data) * 0.9)]
+    y_train = close_data[0 : int(len(close_data) * 0.9)]
+    x_test = open_data[int(len(open_data) * 0.9) : len(open_data)]
+    y_test = close_data[int(len(close_data) * 0.9) : len(close_data)]
     return x_train, y_train, x_test, y_test
 
 def shuffle_data(x_train: numpy.array, y_train: numpy.array):
 
     dataset = tensorflow.data.Dataset.from_tensor_slices((x_train, y_train))
-    dataset = dataset.shuffle(DATA_SAMPLE, reshuffle_each_iteration=True)
+    dataset = dataset.shuffle(len(y_train), reshuffle_each_iteration=True)
     (shuffle_open_data, shuffle_close_data) = list(zip(*list(dataset.as_numpy_iterator())))
     return numpy.array(shuffle_open_data), numpy.array(shuffle_close_data)

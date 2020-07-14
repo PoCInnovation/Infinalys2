@@ -27,13 +27,13 @@ def download_stocks(symbol: str = None, dl_path: str = None, proxies_path: str =
         interval_arg: Interval of the stock to be downloaded
     """
 
-    stock_path = f'{dl_path}/{symbol}.csv'
+    stock_path = f'{dl_path}/{symbol}_{interval_arg}.csv'
     if os.path.isfile(stock_path) == True:
         return stock_path
     if proxies_path is not None:
         proxies = _get_proxies(proxies_path)
 
-    stock_name = os.path.join(dl_path, symbol + '.csv')
+    stock_name = os.path.join(dl_path, symbol + '_' + interval_arg + '.csv')
 
     if proxies_path is not None:
         proxy = rchoice(proxies)
