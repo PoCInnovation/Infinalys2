@@ -1,9 +1,12 @@
 import os
 import pandas
+pandas.set_option('mode.chained_assignment', None)
 import numpy
 from stockstats import StockDataFrame
+import warnings
+warnings.filterwarnings('ignore')
 
-INDICATORS = ['change', 'volume_delta', 'open_2_sma', 'adx_6_ema', 'macd', 'boll_ub', 'boll_lb', 'rsi_12', 'pdi']
+INDICATORS = ['change', 'volume_delta', 'open_2_sma', 'adx_6_ema', 'macds', 'boll_ub', 'boll_lb', 'rsi_12', 'pdi']
 
 def add_indicator(array, values):
     bools = []
@@ -20,5 +23,5 @@ def manage_stocks(stock_path: str):
     stock_stats = StockDataFrame.retype(stock)
     array = stock.to_numpy()
     for i in range(len(INDICATORS)):
-        array = add_indicator(array, stock_stats.get(INDICATORS[i]).to_numpy())
+        array = add_indicator(array, stock_stats[INDICATORS[i]].to_numpy())
     return array

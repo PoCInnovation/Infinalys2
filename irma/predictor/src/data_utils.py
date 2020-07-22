@@ -6,6 +6,7 @@ import tensorflow
 
 # Globals
 NB_INDICATORS = 15
+BATCH_SIZE = 9
 
 def have_one_nan(array: numpy.array, line: int):
     for i in range(NB_INDICATORS):
@@ -21,6 +22,7 @@ def init_data(array):
         if have_one_nan(array, i) is True:
             array = numpy.delete(array, i, axis=0)
             i -= 1
+    #print(array)
     for i in range(len(array)):
         close_data.append(array[i][4])
     close_data = numpy.asarray(close_data)
@@ -56,6 +58,20 @@ def split_data(open_data: numpy.array, close_data: numpy.array):
     x_test = open_data[int(len(open_data) * 0.9) : len(open_data)]
     y_test = close_data[int(len(close_data) * 0.9) : len(close_data)]
     return x_train, y_train, x_test, y_test
+
+def batch_data(x_train: numpy.array, y_train: numpy.array):
+
+    dataset = tensorflow.data.Dataset.from_tensor_slices((x_train, y_train))
+    dataset = dataset.batch(BATCH_SIZE)
+    (shuffle_open_data, shuffle_close_data) = list(zip(*list(dataset.as_numpy_iterator())))
+    return numpy.array(shuffle_open_data), numpy.array(shuffle_close_data)
+
+def unbatch_data(x_train: numpy.array, y_train: numpy.array):
+
+    dataset = tensorflow.data.Dataset.from_tensor_slices((x_train, y_train))
+    dataset = dataset.unbatch()
+    (shuffle_open_data, shuffle_close_data) = list(zip(*list(dataset.as_numpy_iterator())))
+    return numpy.array(shuffle_open_data), numpy.array(shuffle_close_data)
 
 def shuffle_data(x_train: numpy.array, y_train: numpy.array):
 
