@@ -1,5 +1,4 @@
 # Infinalys2
-# Infinalys2
 
 Infinalys2 is the successor of the Infinalys project which was an artificial intelligence to make prediction of the trading market and currently on the project you have the recovery of trading information.
 
@@ -20,12 +19,22 @@ pip install matplotlib --user
 
 Move into src Folder and run main.py
 ```
-./main.py 
-
+./main.py (stock) (interval)
 OR
-
-python3 main.py
+python3 main.py (stock) (interval)
 ```
+### USAGE 
+stock: stock symbol to be downloaded
+interval: interval of the stock to be downloaded (1d, 5d, or 1mo)
+
+##### EXAMPLES:
+```
+./main.py APPL 1d 
+./main.py OIL 5d
+./main.py
+./main.py AMZN 1mo 
+```
+
 ### Customisation
 
 In the folder assets in irma folder you can see 2 file 
