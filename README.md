@@ -39,7 +39,6 @@ interval: interval of the stock to be downloaded (1d, 5d, or 1mo)
 
 In the folder assets in irma folder you can see 2 file 
 
-![](image/companie.png)
 
 In the companies.csv you got a list of the Best 506 companies in the trading market.
 
