@@ -1,25 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  const [state, setState] = React.useState({
+    Boll: false,
+    Boll_up: false,
+    Boll_down: false,
+    Macd: false,
+  });
+
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
+
+  return(
+    <FormControlLabel
+      control = {
+        <Checkbox
+          checked = {state.Boll}
+          onChange = {handleChange}
+          name = 'Boll'
+          color = 'primary'
+        />
+      }
+      label = "Boll"
+      />
   );
 }
 
