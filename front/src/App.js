@@ -46,6 +46,50 @@ function App() {
     <div>
       <ChartComponent />
 
+      <FormControlLabel
+        control = {
+          <Checkbox
+            checked = {state.Boll}
+            onChange = {handleChange}
+            name = 'Boll'
+            color = 'primary'
+          />
+        }
+        label = "Boll"
+      />
+      <FormControlLabel
+        control = {
+          <Checkbox
+            checked = {state.Boll_up}
+            onChange = {handleChange}
+            name = 'Boll_up'
+            color = 'primary'
+          />
+        }
+        label = "Boll_up"
+      />
+      <FormControlLabel
+        control = {
+          <Checkbox
+            checked = {state.Boll_down}
+            onChange = {handleChange}
+            name = 'Boll_down'
+            color = 'primary'
+          />
+        }
+        label = "Boll_down"
+      />
+      <FormControlLabel
+        control = {
+          <Checkbox
+            checked = {state.Macd}
+            onChange = {handleChange}
+            name = 'Macd'
+            color = 'primary'
+          />
+        }
+        label = "Macd"
+      />
       
     </div>
   );
