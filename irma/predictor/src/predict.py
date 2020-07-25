@@ -55,6 +55,11 @@ def test_model(model, x_test, y_test, scaler, interval):
     x_test = denormalize_data(x_test, x_test, scaler)
     print_predict(predicted_data, real_data, x_test, interval)
 
+def predict_one_interval(model, open_data, scaler, interval):
+    open_data = numpy.reshape(open_data, newshape=(1, NB_INDICATORS - 1))
+    close_data = model.predict(open_data)
+    close_data = numpy.array(denormalize_data(close_data, close_data, scaler))[0]
+    print(f'close next {interval}:', close_data)
 
 def predict_on_stocks(array: numpy.array, model_path: str, interval: str):
     scaler = StandardScaler()
@@ -70,4 +75,7 @@ def predict_on_stocks(array: numpy.array, model_path: str, interval: str):
         epochs=EPOCHS, callbacks=[checkpoint_callback]
     )
 
+    open_data = x_test[len(x_test) - 1]
+    open_data[1] = y_test[len(y_test) - 1]
+    predict_one_interval(model, open_data, scaler, interval)
     #test_model(model, x_test, y_test, scaler, interval)
