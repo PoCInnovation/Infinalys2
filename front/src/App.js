@@ -90,7 +90,22 @@ function App() {
         }
         label = "Macd"
       />
-      
+      <FormControl>
+        <InputLabel>Boursse</InputLabel>
+        <Select
+          native
+          value={state.age}
+          onChange={handleChange}
+          inputProps={{
+            name: 'Boursse',
+          }}
+        >
+          <option aria-label="None" value="" />
+          <option value={() => console.log("TESLA")}>TESLA</option>
+          <option value={() => console.log("APPL")}>APPL</option>
+          <option value={() => console.log("BTC")}>BTC-USD</option>
+        </Select>
+      </FormControl>
     </div>
   );
 }
