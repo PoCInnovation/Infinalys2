@@ -32,9 +32,9 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 			.merge((d, c) => {d.bb = c;})
 			.accessor(d => d.bb);
 
-		const { type, data: initialData, width, ratio } = this.props;
+		const { type, data: initial_data, width, ratio, Boolez } = this.props;
 
-		const calculatedData = bb(initialData); // const calculatedData = ema20(sma20(ema50(smaVolume50(bb(initialData)))));
+		const calculatedData = bb(initial_data); // const calculatedData = ema20(sma20(ema50(smaVolume50(bb(initialData)))));
 		const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => d.date);
 		const {
@@ -48,11 +48,11 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 		const xExtents = [start, end];
 		
 		let boolinger;
-		boolinger = <BollingerSeries yAccessor={d => d.bb} stroke={bbStroke} fill={bbFill} />
-		// if (this.Boolez == true) {
-		// } else {
-		// 	boolinger = <div></div>
-		// }
+		if (Boolez) {
+			boolinger = <BollingerSeries yAccessor={d => d.bb} stroke={bbStroke} fill={bbFill} />
+		} else {
+			boolinger = <div></div>
+		}
 		
 		return (
 			<ChartCanvas height={400}
@@ -84,9 +84,9 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 						at="right"
 						orient="right"
 						displayFormat={format(".2f")} />
+					<OHLCTooltip origin={[-40, 0]}/>
 					<CandlestickSeries />
 					{boolinger}
-					<OHLCTooltip origin={[-40, 0]}/>
 					<BollingerBandTooltip
 						origin={[-38, 60]}
 						yAccessor={d => d.bb}
@@ -98,6 +98,7 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 }
 
 CandleStickChartWithBollingerBandOverlay.propTypes = {
+	Boolez: PropTypes.bool.isRequired,
 	data: PropTypes.array.isRequired,
 	width: PropTypes.number.isRequired,
 	ratio: PropTypes.number.isRequired,
@@ -105,6 +106,7 @@ CandleStickChartWithBollingerBandOverlay.propTypes = {
 };
 
 CandleStickChartWithBollingerBandOverlay.defaultProps = {
+	Boolez: Boolean,
 	type: "svg",
 };
 CandleStickChartWithBollingerBandOverlay = fitWidth(CandleStickChartWithBollingerBandOverlay);

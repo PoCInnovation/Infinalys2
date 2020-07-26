@@ -8,14 +8,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-
-
 //MARK: this way is for chart component
 class ChartComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.boolinger = false;
-  }
 	componentDidMount() {
 		getData().then(data => {
 			this.setState({ data })
@@ -27,7 +21,7 @@ class ChartComponent extends React.Component {
 		}
 		return (
 			<TypeChooser>
-				{type => <Chart type={type} data={this.state.data} />}
+				{type => <Chart type={type} data={this.state.data} Boolez={this.props.boolinger}/>}
 			</TypeChooser>
 		)
 	}
@@ -42,9 +36,9 @@ function App() {
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
-
   return(
     <div>
+      
       <ChartComponent boolinger={state.Boll}/>
       <FormControlLabel
         control = {
@@ -62,7 +56,7 @@ function App() {
         <Select
           native
           value={state.age}
-          onChange={handleChange}
+          //onChange={handleChange}
           inputProps={{
             name: 'Boursse',
           }}
