@@ -37,32 +37,32 @@ const bbFill = "#4682B4";
 
 class CandleStickChartWithBollingerBandOverlay extends React.Component {
 	render() {
-		const ema20 = ema()
-			.options({
-				windowSize: 20, // optional will default to 10
-				sourcePath: "close", // optional will default to close as the source
-			})
-			.skipUndefined(true) // defaults to true
-			.merge((d, c) => {d.ema20 = c;}) // Required, if not provided, log a error
-			.accessor(d => d.ema20) // Required, if not provided, log an error during calculation
-			.stroke("blue"); // Optional
+		// const ema20 = ema()
+		// 	.options({
+		// 		windowSize: 20, // optional will default to 10
+		// 		sourcePath: "close", // optional will default to close as the source
+		// 	})
+		// 	.skipUndefined(true) // defaults to true
+		// 	.merge((d, c) => {d.ema20 = c;}) // Required, if not provided, log a error
+		// 	.accessor(d => d.ema20) // Required, if not provided, log an error during calculation
+		// 	.stroke("blue"); // Optional
 
-		const sma20 = sma()
-			.options({ windowSize: 20 })
-			.merge((d, c) => {d.sma20 = c;})
-			.accessor(d => d.sma20);
+		// const sma20 = sma()
+		// 	.options({ windowSize: 20 })
+		// 	.merge((d, c) => {d.sma20 = c;})
+		// 	.accessor(d => d.sma20);
 
-		const ema50 = ema()
-			.options({ windowSize: 50 })
-			.merge((d, c) => {d.ema50 = c;})
-			.accessor(d => d.ema50);
+		// const ema50 = ema()
+		// 	.options({ windowSize: 50 })
+		// 	.merge((d, c) => {d.ema50 = c;})
+		// 	.accessor(d => d.ema50);
 
-		const smaVolume50 = sma()
-			.options({ windowSize: 20, sourcePath: "volume" })
-			.merge((d, c) => {d.smaVolume50 = c;})
-			.accessor(d => d.smaVolume50)
-			.stroke("#4682B4")
-			.fill("#4682B4");
+		// const smaVolume50 = sma()
+		// 	.options({ windowSize: 20, sourcePath: "volume" })
+		// 	.merge((d, c) => {d.smaVolume50 = c;})
+		// 	.accessor(d => d.smaVolume50)
+		// 	.stroke("#4682B4")
+		// 	.fill("#4682B4");
 
 		const bb = bollingerBand()
 			.merge((d, c) => {d.bb = c;})
@@ -70,7 +70,7 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 
 		const { type, data: initialData, width, ratio } = this.props;
 
-		const calculatedData = ema20(sma20(ema50(smaVolume50(bb(initialData)))));
+		const calculatedData = bb(initialData); // const calculatedData = ema20(sma20(ema50(smaVolume50(bb(initialData)))));
 		const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => d.date);
 		const {
@@ -83,7 +83,15 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 		const start = xAccessor(last(data));
 		const end = xAccessor(data[Math.max(0, data.length - 150)]);
 		const xExtents = [start, end];
-
+		
+		const index = 0;
+		let boolinger;
+		if (index == 1) {
+			boolinger = <BollingerSeries yAccessor={d => d.bb} stroke={bbStroke} fill={bbFill} />
+		} else {
+			boolinger = <div></div>
+		}
+		
 		return (
 			<ChartCanvas height={400}
 				width={width}
@@ -118,9 +126,7 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 						displayFormat={format(".2f")} />
 
 					<CandlestickSeries />
-					<BollingerSeries yAccessor={d => d.bb}
-						stroke={bbStroke}
-						fill={bbFill} />
+					{boolinger}
 
 					{/* <LineSeries yAccessor={sma20.accessor()} stroke={sma20.stroke()}/>
 					<LineSeries yAccessor={ema20.accessor()} stroke={ema20.stroke()}/>
@@ -158,25 +164,8 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 					<BollingerBandTooltip
 						origin={[-38, 60]}
 						yAccessor={d => d.bb}
-						options={bb.options()} />
+						options={bb.options()} />	
 				</Chart>
-				{/* <Chart id={2}
-					yExtents={[d => d.volume, smaVolume50.accessor()]}
-					height={150} origin={(w, h) => [0, h - 150]}
-				>
-					<YAxis axisAt="left" orient="left" ticks={5} tickFormat={format(".2s")}/>
-
-					<MouseCoordinateY
-						at="left"
-						orient="left"
-						displayFormat={format(".4s")} />
-
-					<BarSeries yAccessor={d => d.volume} fill={d => d.close > d.open ? "#6BA583" : "#FF0000" } />
-					<AreaSeries yAccessor={smaVolume50.accessor()} stroke={smaVolume50.stroke()} fill={smaVolume50.fill()}/>
-					<CurrentCoordinate yAccessor={smaVolume50.accessor()} fill={smaVolume50.stroke()} />
-					<CurrentCoordinate yAccessor={d => d.volume} fill="#9B0A47" />
-				</Chart>
-				<CrossHairCursor /> */}
 			</ChartCanvas>
 		);
 	}
