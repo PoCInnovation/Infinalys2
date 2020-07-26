@@ -12,6 +12,10 @@ import Select from '@material-ui/core/Select';
 
 //MARK: this way is for chart component
 class ChartComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.boolinger = false;
+  }
 	componentDidMount() {
 		getData().then(data => {
 			this.setState({ data })
@@ -33,9 +37,6 @@ class ChartComponent extends React.Component {
 function App() {
   const [state, setState] = React.useState({
     Boll: false,
-    Boll_up: false,
-    Boll_down: false,
-    Macd: false,
   });
 
   const handleChange = (event) => {
@@ -44,8 +45,7 @@ function App() {
 
   return(
     <div>
-      <ChartComponent />
-
+      <ChartComponent boolinger={state.Boll}/>
       <FormControlLabel
         control = {
           <Checkbox
@@ -56,39 +56,6 @@ function App() {
           />
         }
         label = "Boll"
-      />
-      <FormControlLabel
-        control = {
-          <Checkbox
-            checked = {state.Boll_up}
-            onChange = {handleChange}
-            name = 'Boll_up'
-            color = 'primary'
-          />
-        }
-        label = "Boll_up"
-      />
-      <FormControlLabel
-        control = {
-          <Checkbox
-            checked = {state.Boll_down}
-            onChange = {handleChange}
-            name = 'Boll_down'
-            color = 'primary'
-          />
-        }
-        label = "Boll_down"
-      />
-      <FormControlLabel
-        control = {
-          <Checkbox
-            checked = {state.Macd}
-            onChange = {handleChange}
-            name = 'Macd'
-            color = 'primary'
-          />
-        }
-        label = "Macd"
       />
       <FormControl>
         <InputLabel>Boursse</InputLabel>
