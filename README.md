@@ -14,6 +14,12 @@ pip install stockstats --user
 pip install tensorflow --user
 pip install matplotlib --user
 ```
+## and frontend you must
+```
+cd front
+npm install
+npm start
+```
 
 ## Overview
 
@@ -50,3 +56,5 @@ the result of the fetch of companies_test is put into the ```stock ``` file
 
 * [yahoo-finance-api](https://github.com/topics/yahoo-finance-api) - Fetch framework used
 * [stock-stats](https://github.com/jealous/stockstats) - Stocks indicators calculator
+* [stockCharts](https://github.com/rrag/react-stockcharts) - chart lib in react
+* [materialUI](https://material-ui.com/) - graphical framework in react
