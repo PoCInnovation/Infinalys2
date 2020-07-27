@@ -23,28 +23,32 @@ Move into src Folder and run main.py
 OR
 python3 main.py (stock) (interval)
 ```
-### USAGE 
+### USAGE
 stock: stock symbol to be downloaded
 interval: interval of the stock to be downloaded (1d, 5d, or 1mo)
 
 ##### EXAMPLES:
 ```
-./main.py APPL 1d 
+./main.py APPL 1d
 ./main.py OIL 5d
 ./main.py
-./main.py AMZN 1mo 
+./main.py AMZN 1mo
 ```
 
 ### Customisation
 
-In the folder assets in irma folder you can see 2 file 
+In the folder assets in irma folder you can see 2 file
 
 
 In the companies.csv you got a list of the Best 506 companies in the trading market.
 
 And you can copy in this file somme companies and put them into the file companies_test to evaluate them
 
-the result of the fetch of companies_test is put into the ```stock ``` file 
+the result of the fetch of companies_test is put into the ```stock ``` file
+
+## Back_end
+
+The back_end is done with flask we get request to be able transmit the purse and the candle time.
 
 ## Built With
 
