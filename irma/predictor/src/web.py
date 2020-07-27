@@ -19,12 +19,10 @@ DEBUG = True
 MODELS_PATH = "../models"
 NB_INDICATORS = 15
 
-# print("\033[34;01m", array.shape, "\033[00m\n")
-# print("\033[34;01m", open_data, "\033[00m\n")
-
-def reshape_data(array: numpy.array, scaler):
-    (data, data_t) = normalize_data(array, array, scaler, NB_INDICATORS + 1)
-    open_data = data[len(data) - 1]
+def prepare_prediction(array: numpy.array):
+    scaler = StandardScaler()
+    array = normalize_data(array, array, scaler, NB_INDICATORS + 1)[0]
+    open_data = array[len(array) - 1]
     open_data[1] = open_data[4]
     open_data = numpy.delete(open_data, 4, 0)
     return (open_data)
@@ -39,29 +37,30 @@ def transform_nan(stocks_data: numpy.array):
 
 @app.route("/", methods=["GET", "POST"])
 def hello():
-    finance = ""
-    model = 0
-    duration = "1mo"
+    stock_symbol = None
+    model = None
+    interval = None
 
-    if request.args.get("finance") is not None:
-        try:
-            scaler = StandardScaler()
-            finance = str(request.args["finance"])
-            duration = str(request.args["duration"])
-            model_path = f'{MODELS_PATH}/model_{finance}_{duration}'
+    if request.args.get("stock") is not None:
+        stock_symbol = str(request.args["stock"])
+        interval = str(request.args["interval"])
+        model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
 
-            stocks_data = generate_model_on_stock(finance, duration)
-            stocks = reshape_data(stocks_data, scaler)
-            stocks_data = transform_nan(stocks_data)
+        (stocks_data, scaler) = generate_model_on_stock(stock_symbol, interval)
+        to_predict_data = numpy.array(prepare_prediction(stocks_data))
+        stocks_data = numpy.array(stocks_data)
 
-            model = tensorflow.keras.models.load_model(model_path)
-            predict = predict_one_interval(model, stocks, scaler, duration)
+        model = tensorflow.keras.models.load_model(model_path)
+        predict = predict_one_interval(model, to_predict_data, scaler).tolist()
 
-            predict = predict.tolist()
-            stocks_data = stocks_data + predict
-        except:
-            return ("Error")
-    return jsonify(stocks_data)
+        stocks_data = scaler.inverse_transform(stocks_data)
+
+        stocks_data = numpy.delete(stocks_data, numpy.s_[7:NB_INDICATORS - 1], axis=1)
+        stocks_data = numpy.array(transform_nan(stocks_data))
+        stocks_data = stocks_data.tolist() + predict
+        return jsonify(stocks_data)
+    else:
+        return jsonify('Please enter a stock symbol and an interval in the URL')
 
 if __name__ == "__main__":
     app.run(host=HOST, debug=DEBUG)
