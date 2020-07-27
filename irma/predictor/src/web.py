@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 import tensorflow
 import numpy
 import math
-import simplejson as json
 
 from main import *
 from predict import *
 from data_utils import *
+from list_to_tsv import *
 
 app = Flask(__name__)
 
@@ -35,15 +35,22 @@ def transform_nan(stocks_data: numpy.array):
                 stocks_data[y][i] = None
     return (stocks_data)
 
-@app.route("/", methods=["GET", "POST"])
+def get_interval():
+    interval = None
+    if request.args.get("interval") is None:
+        interval = "1mo"
+    else:
+        interval = str(request.args["interval"])
+    return (interval)
+
+@app.route("/", methods=["GET"])
 def hello():
     stock_symbol = None
     model = None
-    interval = None
+    interval = get_interval()
 
     if request.args.get("stock") is not None:
         stock_symbol = str(request.args["stock"])
-        interval = str(request.args["interval"])
         model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
 
         (stocks_data, scaler) = generate_model_on_stock(stock_symbol, interval)
@@ -56,7 +63,9 @@ def hello():
         stocks_data = numpy.delete(stocks_data, numpy.s_[7:NB_INDICATORS - 1], axis=1)
         stocks_data = numpy.array(transform_nan(stocks_data))
         stocks_data = stocks_data.tolist() + predict
-        return jsonify(stocks_data)
+
+        list_to_tsv(stocks_data)
+        return (send_file("output.tsv", as_attachment=True))
     else:
         return jsonify('Please enter a stock symbol and an interval in the URL')
 
