@@ -36,7 +36,6 @@ def generate_model_on_stock(stock_symbol: str, interval: str):
     model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
     #if os.path.isdir(model_path) is False:
     predict_on_stocks(stock_data, model_path, interval)
-
     return (stock_data)
 
 def main():

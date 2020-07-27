@@ -60,6 +60,7 @@ def predict_one_interval(model, open_data, scaler, interval):
     close_data = model.predict(open_data)
     close_data = numpy.array(denormalize_data(close_data, close_data, scaler))[0]
     print(f'close next {interval}:', close_data)
+    return (close_data)
 
 def predict_on_stocks(array: numpy.array, model_path: str, interval: str):
     scaler = StandardScaler()
