@@ -53,8 +53,6 @@ def hello():
         model = tensorflow.keras.models.load_model(model_path)
         predict = predict_one_interval(model, to_predict_data, scaler).tolist()
 
-        stocks_data = scaler.inverse_transform(stocks_data)
-
         stocks_data = numpy.delete(stocks_data, numpy.s_[7:NB_INDICATORS - 1], axis=1)
         stocks_data = numpy.array(transform_nan(stocks_data))
         stocks_data = stocks_data.tolist() + predict
