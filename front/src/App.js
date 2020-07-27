@@ -8,8 +8,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-
-
 //MARK: this way is for chart component
 class ChartComponent extends React.Component {
 	componentDidMount() {
@@ -23,7 +21,7 @@ class ChartComponent extends React.Component {
 		}
 		return (
 			<TypeChooser>
-				{type => <Chart type={type} data={this.state.data} />}
+				{type => <Chart type={type} data={this.state.data} Boolez={this.props.boolinger}/>}
 			</TypeChooser>
 		)
 	}
@@ -33,19 +31,15 @@ class ChartComponent extends React.Component {
 function App() {
   const [state, setState] = React.useState({
     Boll: false,
-    Boll_up: false,
-    Boll_down: false,
-    Macd: false,
   });
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
-
   return(
     <div>
-      <ChartComponent />
-
+      
+      <ChartComponent boolinger={state.Boll}/>
       <FormControlLabel
         control = {
           <Checkbox
@@ -57,45 +51,12 @@ function App() {
         }
         label = "Boll"
       />
-      <FormControlLabel
-        control = {
-          <Checkbox
-            checked = {state.Boll_up}
-            onChange = {handleChange}
-            name = 'Boll_up'
-            color = 'primary'
-          />
-        }
-        label = "Boll_up"
-      />
-      <FormControlLabel
-        control = {
-          <Checkbox
-            checked = {state.Boll_down}
-            onChange = {handleChange}
-            name = 'Boll_down'
-            color = 'primary'
-          />
-        }
-        label = "Boll_down"
-      />
-      <FormControlLabel
-        control = {
-          <Checkbox
-            checked = {state.Macd}
-            onChange = {handleChange}
-            name = 'Macd'
-            color = 'primary'
-          />
-        }
-        label = "Macd"
-      />
       <FormControl>
         <InputLabel>Boursse</InputLabel>
         <Select
           native
           value={state.age}
-          onChange={handleChange}
+          //onChange={handleChange}
           inputProps={{
             name: 'Boursse',
           }}
