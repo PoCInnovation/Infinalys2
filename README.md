@@ -14,6 +14,12 @@ pip install stockstats --user
 pip install tensorflow --user
 pip install matplotlib --user
 ```
+## and frontend you must
+```
+cd front
+npm install
+npm start
+```
 
 ## Overview
 
@@ -54,3 +60,5 @@ The back_end is done with flask we get request to be able transmit the purse and
 
 * [yahoo-finance-api](https://github.com/topics/yahoo-finance-api) - Fetch framework used
 * [stock-stats](https://github.com/jealous/stockstats) - Stocks indicators calculator
+* [stockCharts](https://github.com/rrag/react-stockcharts) - chart lib in react
+* [materialUI](https://material-ui.com/) - graphical framework in react
