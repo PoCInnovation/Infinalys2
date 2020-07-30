@@ -2,7 +2,6 @@ import { tsvParse} from "d3-dsv";
 import { timeParse } from "d3-time-format";
 
 function parseData(parse) {
-	console.log(parse)
 	return function(d) {
 		d.date = parse(d.date);
 		d.open = +d.open;
@@ -10,8 +9,6 @@ function parseData(parse) {
 		d.low = +d.low;
 		d.close = +d.close;
 		d.volume = +d.volume;
-
-		console.log(d)
 		return d;
 	};
 }

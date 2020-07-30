@@ -32,7 +32,7 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 			.merge((d, c) => {d.bb = c;})
 			.accessor(d => d.bb);
 
-		const { type, data: initial_data, width, ratio, Boolez } = this.props;
+		const { type, data: initial_data, width, ratio, Boll } = this.props;
 
 		const calculatedData = bb(initial_data); // const calculatedData = ema20(sma20(ema50(smaVolume50(bb(initialData)))));
 		const xScaleProvider = discontinuousTimeScaleProvider
@@ -48,7 +48,7 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 		const xExtents = [start, end];
 		
 		let boolinger;
-		if (Boolez) {
+		if (Boll) {
 			boolinger = <BollingerSeries yAccessor={d => d.bb} stroke={bbStroke} fill={bbFill} />
 		} else {
 			boolinger = <div></div>
@@ -98,7 +98,7 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 }
 
 CandleStickChartWithBollingerBandOverlay.propTypes = {
-	Boolez: PropTypes.bool.isRequired,
+	Boll: PropTypes.bool.isRequired,
 	data: PropTypes.array.isRequired,
 	width: PropTypes.number.isRequired,
 	ratio: PropTypes.number.isRequired,
@@ -106,7 +106,7 @@ CandleStickChartWithBollingerBandOverlay.propTypes = {
 };
 
 CandleStickChartWithBollingerBandOverlay.defaultProps = {
-	Boolez: Boolean,
+	Boll: Boolean,
 	type: "svg",
 };
 CandleStickChartWithBollingerBandOverlay = fitWidth(CandleStickChartWithBollingerBandOverlay);
