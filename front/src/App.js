@@ -33,17 +33,18 @@ import InboxIcon from '@material-ui/icons/Inbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
 
 class ChartComponent extends React.Component {
-	componentDidMount() {
-		getData().then(data => {
+	componentWillReceiveProps() {
+    console.log("WILL UPDATE")
+    console.log(this.props.trade);
+      getData(this.props.trade).then(data => {
 			this.setState({ data })
 		})
-	}
+  }
+
 	render() {
 		if (this.state == null) {
 			return <div>Loading...</div>
 		}
-    console.log(this.props.bolinger)
-    console.log(this.props.trade)
 		return (
 			<TypeChooser>
 				{type => <Chart type={type} data={this.state.data} Boll={this.props.bolinger}/>}
@@ -82,8 +83,8 @@ function App() {
   };
   
   const handleListItemClick = (event, index, index_boursse) => {
-    setSelectedIndex(index);
     setbourse(index_boursse)
+    setSelectedIndex(index);
   };
   
   const [boursse, setbourse] = React.useState("");
@@ -145,6 +146,16 @@ function App() {
                     <InboxIcon />
                   </ListItemIcon>
                   <ListItemText primary="TESLA" />
+                </ListItem>
+                <ListItem
+                  button
+                  selected={selectedIndex === 2}
+                  onClick={(event) => handleListItemClick(event, 2, "TEST")}
+                >
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="TEST" />
                 </ListItem>
               </List>
             </Grid>
