@@ -13,6 +13,7 @@ import pandas
 import math
 
 from sklearn.preprocessing import StandardScaler
+from sklearn.externals.joblib import dump
 from sklearn.model_selection import train_test_split
 
 from data_utils import *
@@ -77,4 +78,4 @@ def predict_on_stocks(array: numpy.array, model_path: str, interval: str):
 
     #test_model(model, x_test, y_test, scaler, interval)
 
-    return scaler
+    dump(scaler, f'{model_path}/std_scaler.bin', compress=True)
