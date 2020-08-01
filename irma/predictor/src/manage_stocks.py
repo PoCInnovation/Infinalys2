@@ -21,7 +21,7 @@ def add_indicator(array, values):
 def manage_stocks(stock_path: str):
     stock = pandas.read_csv(stock_path)
     stock_stats = StockDataFrame.retype(stock)
-    array = stock.to_numpy()
+    array = numpy.array(stock)
     for i in range(len(INDICATORS)):
         array = add_indicator(array, stock_stats[INDICATORS[i]].to_numpy())
     return array

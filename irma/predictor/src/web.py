@@ -2,6 +2,7 @@
 
 from flask import Flask, jsonify, request, send_file
 import tensorflow
+from sklearn.externals.joblib import load
 import numpy
 import math
 
@@ -33,7 +34,7 @@ def transform_nan(stocks_data: numpy.array):
         for i in range(len(stocks_data[y])):
             if math.isnan(stocks_data[y][i]):
                 stocks_data[y][i] = None
-    return (stocks_data)
+    return (numpy.array(stocks_data))
 
 def get_interval():
     interval = None
@@ -44,25 +45,28 @@ def get_interval():
     return (interval)
 
 @app.route("/", methods=["GET"])
-def hello():
-    stock_symbol = None
-    model = None
+def backend():
     interval = get_interval()
 
     if request.args.get("stock") is not None:
         stock_symbol = str(request.args["stock"])
         model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
 
-        (stocks_data, scaler) = generate_model_on_stock(stock_symbol, interval)
-        to_predict_data = numpy.array(prepare_prediction(stocks_data))
-        stocks_data = numpy.array(stocks_data)
-
+        stocks_data = generate_model_on_stock(stock_symbol, interval)
+        scaler = load(f'{model_path}/std_scaler.bin')
         model = tensorflow.keras.models.load_model(model_path)
-        predict = predict_one_interval(model, to_predict_data, scaler).tolist()
 
-        stocks_data = numpy.delete(stocks_data, numpy.s_[7:NB_INDICATORS - 1], axis=1)
-        stocks_data = numpy.array(transform_nan(stocks_data))
-        stocks_data = stocks_data.tolist() + predict
+        prediction = predict_one_interval(
+            model,
+            numpy.array(prepare_prediction(stocks_data)),
+            scaler
+        ).tolist()
+
+        stocks_data = transform_nan(
+            numpy.delete(
+                stocks_data, numpy.s_[7:NB_INDICATORS - 1], axis=1
+            )
+        ).tolist() + prediction
 
         list_to_tsv(stocks_data)
         return (send_file("output.tsv", as_attachment=True))

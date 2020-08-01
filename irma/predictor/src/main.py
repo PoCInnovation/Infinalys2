@@ -19,10 +19,10 @@ USAGE = "\nInfinalys: A.I. to make predictions on stocks\n\nUSAGE\n\t./main.py (
 VALID_INTERVALS = ['1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1wk', '1mo', '3mo']
 
 def error_handling_arguments(argv: list):
-    if len(sys.argv) != 3:
+    if len(argv) != 3:
         print(USAGE)
         return True
-    if sys.argv[2] not in VALID_INTERVALS:
+    if argv[2] not in VALID_INTERVALS:
         print("Argument interval_arg must be one of these: 1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo")
         return True
     return False
@@ -34,9 +34,9 @@ def generate_model_on_stock(stock_symbol: str, interval: str):
     stock_data = manage_stocks(stock_path)
 
     model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
-    #if os.path.isdir(model_path) is False:
-    scaler = predict_on_stocks(stock_data, model_path, interval)
-    return (stock_data, scaler)
+    if os.path.isdir(model_path) is False:
+        predict_on_stocks(stock_data, model_path, interval)
+    return (stock_data)
 
 def main():
     if error_handling_arguments(sys.argv) == True:
