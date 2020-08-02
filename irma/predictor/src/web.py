@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 
 from flask import Flask, jsonify, request, send_file
+from sklearn.preprocessing import StandardScaler
+from joblib import load
+
 import tensorflow
-from sklearn.externals.joblib import load
 import numpy
 import math
 
-from main import *
-from predict import *
-from data_utils import *
-from list_to_tsv import *
+from main import generate_model_on_stock
+from predict import predict_one_interval
+from list_to_tsv import list_to_tsv
 
 app = Flask(__name__)
 
@@ -48,8 +49,8 @@ def get_interval():
 def backend():
     interval = get_interval()
 
-    if request.args.get("stock") is not None:
-        stock_symbol = str(request.args["stock"])
+    if request.args.get('stock') is not None and request.args.get('interval') is not None:
+        stock_symbol = str(request.args['stock'])
         model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
 
         stocks_data = generate_model_on_stock(stock_symbol, interval)
