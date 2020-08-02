@@ -29,6 +29,7 @@ def prepare_prediction(array: numpy.array):
     open_data = array[len(array) - 1]
     open_data[1] = open_data[4]
     open_data = numpy.delete(open_data, 4, 0)
+
     return (open_data)
 
 def transform_nan(stocks_data: numpy.array):
