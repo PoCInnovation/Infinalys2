@@ -47,7 +47,14 @@ class ChartComponent extends React.Component {
 		}
 		return (
 			<TypeChooser>
-				{type => <Chart type={type} data={this.state.data} Boll={this.props.bolinger}/>}
+        {type => <Chart 
+        type={type} 
+        data={this.state.data} 
+        Boll={this.props.bolinger}
+        EMA_20={this.props.ema_20}
+        SMA_20={this.props.sma_20}
+        EMA_50={this.props.ema_50}
+        />}
 			</TypeChooser>
 		)
 	}
@@ -72,9 +79,9 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const [state, setState] = React.useState({
     Boll: false,
-    checkedB: false,
-    checkedF: false,
-    checkedG: false,
+    ema_20: false,
+    sma_20: false,
+    ema_50: false,
   });
 
   
@@ -106,7 +113,7 @@ function App() {
       <div className={classes.root}>
         <ThemeProvider theme={theme}>
           <CssBaseline/>
-          <ChartComponent bolinger={state.Boll} trade={boursse}/>
+          <ChartComponent bolinger={state.Boll} ema_20={state.ema_20} ema_50={state.ema_50} sma_20={state.sma_20} trade={boursse}/>
           <Grid container spacing={3}>
             <Grid item xs>
               <List>
@@ -114,13 +121,16 @@ function App() {
                   <FormControlLabel control={<Checkbox checked={state.Boll} onChange={handleChange} name="Boll" color={"primary"}/>}
                     label="Bolinger"
                   />
-                  <FormControlLabel control={<Checkbox checked={state.checkedF} onChange={handleChange} name="checkedF" color={"primary"}/>}
-                    label="label3"
+                  <FormControlLabel control={<Checkbox checked={state.sma_20} onChange={handleChange} name="sma_20" color={"primary"}/>}
+                    label="sma20"
                   />
                 </ListItem>
                 <ListItem>
-                  <FormControlLabel control={<Checkbox checked={state.checkedB} onChange={handleChange} name="checkedB" color={"primary"}/>}
-                    label="label2"
+                  <FormControlLabel control={<Checkbox checked={state.ema_20} onChange={handleChange} name="ema_20" color={"primary"}/>}
+                    label="ema20"
+                  />
+                  <FormControlLabel control={<Checkbox checked={state.ema_50} onChange={handleChange} name="ema_50" color={"primary"}/>}
+                    label="ema50"
                   />
                 </ListItem>
               </List>
