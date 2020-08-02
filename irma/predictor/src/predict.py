@@ -8,12 +8,11 @@ import tensorflow
 import datetime
 # Numpy and Pandas
 import numpy
-numpy.set_printoptions(threshold=sys.maxsize)
 import pandas
 import math
 
 from sklearn.preprocessing import StandardScaler
-from sklearn.externals.joblib import dump
+from joblib import dump
 from sklearn.model_selection import train_test_split
 
 from data_utils import *

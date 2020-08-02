@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 
 from flask import Flask, jsonify, request, send_file
+from sklearn.preprocessing import StandardScaler
+from joblib import load
+
 import tensorflow
-from sklearn.externals.joblib import load
 import numpy
 import math
 
-from main import *
-from predict import *
-from data_utils import *
-from list_to_tsv import *
+from main import generate_model_on_stock
+from predict import predict_one_interval
+from list_to_tsv import list_to_tsv
+from data_utils import normalize_data
 
 app = Flask(__name__)
 
@@ -18,6 +20,7 @@ PORT = 8080
 DEBUG = True
 
 MODELS_PATH = "../models"
+TSV_PATH = "../tsv"
 NB_INDICATORS = 15
 
 def prepare_prediction(array: numpy.array):
@@ -26,6 +29,7 @@ def prepare_prediction(array: numpy.array):
     open_data = array[len(array) - 1]
     open_data[1] = open_data[4]
     open_data = numpy.delete(open_data, 4, 0)
+
     return (open_data)
 
 def transform_nan(stocks_data: numpy.array):
@@ -48,8 +52,8 @@ def get_interval():
 def backend():
     interval = get_interval()
 
-    if request.args.get("stock") is not None:
-        stock_symbol = str(request.args["stock"])
+    if request.args.get('stock') is not None and request.args.get('interval') is not None:
+        stock_symbol = str(request.args['stock'])
         model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
 
         stocks_data = generate_model_on_stock(stock_symbol, interval)
@@ -60,16 +64,19 @@ def backend():
             model,
             numpy.array(prepare_prediction(stocks_data)),
             scaler
-        ).tolist()
+        )
 
         stocks_data = transform_nan(
             numpy.delete(
                 stocks_data, numpy.s_[7:NB_INDICATORS - 1], axis=1
             )
-        ).tolist() + prediction
+        ).tolist()
 
-        list_to_tsv(stocks_data)
-        return (send_file("output.tsv", as_attachment=True))
+        prediction_list = [0, 0, 0, 0, 0, 0, 0]
+        prediction_list[4] = prediction[0]
+
+        list_to_tsv(stock_symbol, interval, prediction_list)
+        return (send_file(f'{TSV_PATH}/{stock_symbol}_{interval}.tsv', as_attachment=True))
     else:
         return jsonify('Please enter a stock symbol and an interval in the URL')
 
