@@ -1,5 +1,5 @@
 FROM python:3
-RUN pip install gunicorn flask tensorflow python-csv pandas matplotlib stockstats yfinance
+RUN pip install gunicorn flask tensorflow python-csv pandas matplotlib stockstats yfinance Flask-WTF
 RUN pip install scikit-learn==0.22.2
 WORKDIR /app
 COPY predictor /app/
