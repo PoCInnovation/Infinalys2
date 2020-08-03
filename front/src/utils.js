@@ -9,6 +9,7 @@ function parseData(parse) {
 		d.low = +d.low;
 		d.close = +d.close;
 		d.volume = +d.volume;
+		console.log(d)
 		return d;
 	};
 }
@@ -19,8 +20,8 @@ const parseDate = timeParse("%Y-%m-%d");
 //http://0.0.0.0:5000/?stock=AAPL&interval=3mo
 
 export function getData(value) {
-	console.log("ICI")
-	console.log(value)
+	// console.log("ICI")
+	// console.log(value)
 	var str = "https://cdn.rawgit.com/rrag/react-stockcharts/master/docs/data/MSFT.tsv"
 	if (value === "TEST") {
 		str = "https://cdn.rawgit.com/rrag/react-stockcharts/master/docs/data/MSFT.tsv"
@@ -32,7 +33,7 @@ export function getData(value) {
 	if (value === "APPL") {
 		str = "http://0.0.0.0:5000/?stock=AAPL"
 	}
-	console.log(str)
+	// console.log(str)
 	const promiseMSFT = fetch(str)
 		.then(response => response.text())
 		.then(data => tsvParse(data, parseData(parseDate)))
