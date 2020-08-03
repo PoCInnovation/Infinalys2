@@ -72,7 +72,7 @@ def backend():
             )
         ).tolist()
 
-        prediction_list = [0, 0, 0, 0, 0, 0, 0]
+        prediction_list = [0, 0, 0, 0, 0, 0]
         prediction_list[4] = prediction[0]
 
         list_to_tsv(stock_symbol, interval, prediction_list)
