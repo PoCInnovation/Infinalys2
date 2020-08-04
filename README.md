@@ -6,7 +6,7 @@ Infinalys2 is the successor of the Infinalys project which was an artificial int
 
 ### Prerequisites
 
-## you must install python before going on
+## you must install python modules before going on
 ```
 pip install yfinance --user
 pip install pandas --user
@@ -14,7 +14,7 @@ pip install stockstats --user
 pip install tensorflow --user
 pip install matplotlib --user
 ```
-## and frontend you must
+## and in order to make the frontend works you must
 ```
 cd front
 npm install
@@ -31,7 +31,7 @@ python3 main.py (stock) (interval)
 ```
 ### USAGE
 stock: stock symbol to be downloaded
-interval: interval of the stock to be downloaded (1d, 5d, or 1mo)
+interval: interval of the stock to be downloaded (1d, 5d, 1wk, 1mo, 3mo)
 
 ##### EXAMPLES:
 ```
