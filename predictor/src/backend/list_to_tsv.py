@@ -3,8 +3,8 @@
 import csv
 from datetime import date, timedelta
 
-STOCKS_PATH = "../stocks"
-TSV_PATH = "../tsv"
+STOCKS_PATH = "../../saves/stocks"
+TSV_PATH = "../../saves/tsv"
 
 def csv_to_list(csvin):
     string = csvin.read() + '\n'
@@ -24,7 +24,7 @@ def list_to_tsv(stock_symbol, interval, predict: list):
     stocks_path = f'{STOCKS_PATH}/{stock_symbol}_{interval}.csv'
     tsv_path = f'{TSV_PATH}/{stock_symbol}_{interval}.tsv'
     with open (stocks_path, 'r', newline='') as csvin, open(tsv_path, 'w') as tsvout:
-        csv_read = csv.reader(csvin)
+        csv_read = csv.reader(csvin) ##unused variable
         tsv_write = csv.writer(tsvout, delimiter='\t')
 
         string = csv_to_list(csvin)

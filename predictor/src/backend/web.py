@@ -11,6 +11,9 @@ import tensorflow
 import numpy
 import math
 
+import sys
+sys.path.insert(1, '../ai')
+
 from main import generate_model_on_stock
 from predict import predict_one_interval
 from list_to_tsv import list_to_tsv
@@ -24,8 +27,8 @@ HOST = "0.0.0.0"
 PORT = 8080
 DEBUG = True
 
-MODELS_PATH = "../models"
-TSV_PATH = "../tsv"
+MODELS_PATH = "../../saves/models"
+TSV_PATH = "../../saves/tsv"
 NB_INDICATORS = 15
 
 class Form(FlaskForm):
@@ -49,6 +52,7 @@ def get_interval():
     return (interval)
 
 def prediction_ia(stock_symbol, interval, model_path):
+    print('here')
     stocks_data = generate_model_on_stock(stock_symbol, interval)
     scaler = load(f'{model_path}/std_scaler.bin')
     model = tensorflow.keras.models.load_model(model_path)

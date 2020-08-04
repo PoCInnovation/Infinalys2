@@ -12,9 +12,9 @@ from fetch import download_stocks
 from manage_stocks import manage_stocks
 from predict import predict_on_stocks
 
-PROXIES_PATH = "../assets/proxy_list.txt"
-MODELS_PATH = "../models"
-STOCKS_PATH = "../stocks"
+PROXIES_PATH = "../../saves/assets/proxy_list.txt"
+MODELS_PATH = "../../saves/models"
+STOCKS_PATH = "../../saves/stocks"
 USAGE = "\nInfinalys: A.I. to make predictions on stocks\n\nUSAGE\n\t./main.py (stock) (interval)\n\tstock: stock symbol to be downloaded\n\tinterval: interval of the stock to be downloaded\n\nEXAMPLE\n\t./main.py APPL 1d "
 VALID_INTERVALS = ['1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1wk', '1mo', '3mo']
 
