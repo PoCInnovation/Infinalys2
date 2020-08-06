@@ -1,19 +1,19 @@
 import React from 'react';
+import clsx from 'clsx';
 import Chart from './Chart_candle';
 import { getData } from "./utils"
 import { TypeChooser } from "react-stockcharts/lib/helper";
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-
-
-
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 
 class ChartComponent extends React.Component {
@@ -21,14 +21,19 @@ class ChartComponent extends React.Component {
     super(props)
     this.state = {
       tmp_trade: "",
+      tmp_day: "",
       data: null
     }
   }
   componentDidUpdate() {
-    if (this.props.trade !== this.state.tmp_trade) {
+    if (this.props.trade !== this.state.tmp_trade || this.props.day !== this.state.tmp_day) {
       this.setState({tmp_trade: this.props.trade}, function () {
-        getData(this.state.tmp_trade).then(data => {
-          this.setState({ data })
+        this.setState({tmp_day: this.props.day}, function() {
+          console.log(this.state.tmp_day)
+          console.log(this.state.tmp_trade)
+          getData(this.state.tmp_trade, this.state.tmp_day).then(data => {
+            this.setState({ data })
+          })
         })
       });
 
@@ -55,7 +60,25 @@ class ChartComponent extends React.Component {
 }
 
 
+
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+  },
+  fixedHeight: {
+    height: 400,
+  },
+}));
+
+
 function App() {
+  const classes = useStyles();
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
   const [state, setState] = React.useState({
     Boll: false,
     ema_20: false,
@@ -70,17 +93,23 @@ function App() {
   
   const handleListItemClick = (event, index, index_boursse) => {
     setbourse(index_boursse)
-    setSelectedIndex(index);
+    setSelectedIndex(index)
   };
   
+  const [daytime, setdaytime] = React.useState("");
   const [boursse, setbourse] = React.useState("");
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-
+  console.log(daytime)
     return(
       <div>
-          <ChartComponent bolinger={state.Boll} ema_20={state.ema_20} ema_50={state.ema_50} sma_20={state.sma_20} trade={boursse}/>
-          <Grid container spacing={3}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} md={8} lg={9}>
+              <Paper className={fixedHeightPaper}>
+                <ChartComponent bolinger={state.Boll} ema_20={state.ema_20} ema_50={state.ema_50} sma_20={state.sma_20} trade={boursse} day={daytime}/>
+              </Paper>
+            </Grid>
             <Grid item xs>
+            <Paper className={fixedHeightPaper}>
               <List>
                 <ListItem>
                   <FormControlLabel control={<Checkbox checked={state.Boll} onChange={handleChange} name="Boll" color={"primary"}/>}
@@ -98,41 +127,39 @@ function App() {
                     label="ema50"
                   />
                 </ListItem>
+                <ListItem>
+                  <Paper elevation={3}/>
+                </ListItem>
               </List>
+            </Paper>
             </Grid>
             <Grid item xs>
+            <Paper className={fixedHeightPaper}>
               <List>
-                <ListItem
-                  button
-                  selected={selectedIndex === 0}
-                  onClick={(event) => handleListItemClick(event, 0, "APPL")}
-                >
+                <ListItem button selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 0, "AAPL")}>
                   <ListItemIcon>
                     <ShowChartIcon />
                   </ListItemIcon>
-                  <ListItemText primary="APPL" />
+                  <ListItemText primary="AAPL" />
+                  <ButtonGroup variant="contained" color="primary">
+                    <Button onClick={() => { setdaytime("1d")}}>1D</Button>
+                    <Button onClick={() => { setdaytime("1wk")}}>1W</Button>
+                    <Button onClick={() => { setdaytime("1mo")}}>1M</Button>
+                  </ButtonGroup>
                 </ListItem>
-                <ListItem
-                  button
-                  selected={selectedIndex === 1}
-                  onClick={(event) => handleListItemClick(event, 1, "TESLA")}
-                >
+                <ListItem button selected={selectedIndex === 1} onClick={(event) => handleListItemClick(event, 1, "SBUX")}>
                   <ListItemIcon>
                     <ShowChartIcon />
                   </ListItemIcon>
-                  <ListItemText primary="TESLA" />
-                </ListItem>
-                <ListItem
-                  button
-                  selected={selectedIndex === 2}
-                  onClick={(event) => handleListItemClick(event, 2, "TEST")}
-                >
-                  <ListItemIcon>
-                    <ShowChartIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="TEST" />
+                  <ListItemText primary="SBUX" />
+                  <ButtonGroup variant="contained" color="primary">
+                    <Button onClick={() => { setdaytime("1d")}}>1D</Button>
+                    <Button onClick={() => { setdaytime("1wk")}}>1W</Button>
+                    <Button onClick={() => { setdaytime("1mo")}}>1M</Button>
+                  </ButtonGroup>
                 </ListItem>
               </List>
+              </Paper>
             </Grid>
           </Grid>
       </div>

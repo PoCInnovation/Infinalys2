@@ -24,18 +24,33 @@ function parseData(parse) {
 //https://cdn.rawgit.com/rrag/react-stockcharts/master/docs/data/MSFT.tsv 
 //http://0.0.0.0:5000/?stock=AAPL&interval=3mo
 
-export function getData(value) {
-	var str = "http://localhost:5000/?stock=AAPL&interval=1d"
+export function getData(trade, day) {
+	var str = ""
 
-	if (value === "TEST") {
-		str = "https://cdn.rawgit.com/rrag/react-stockcharts/master/docs/data/MSFT.tsv"
+	if (trade === "SBUX") {
+		if (day === "1d") {
+			str = "http://0.0.0.0:5000/?stock=SBUX&interval=1d"
+		}
+		if (day === "1wk") {
+			str = "http://0.0.0.0:5000/?stock=SBUX&interval=1wk"
+		}
+		if (day === "1mo") {
+			str = "http://0.0.0.0:5000/?stock=SBUX&interval=1mo"
+		}
 	}
-	if (value === "TESLA") {
-		str = "http://0.0.0.0:5000/?stock=TESLA&interval=1mo"
+
+	if (trade === "AAPL") {
+		if (day === "1d") {
+			str = "http://0.0.0.0:5000/?stock=AAPL&interval=1d"
+		}
+		if (day === "1wk") {
+			str = "http://0.0.0.0:5000/?stock=AAPL&interval=1wk"
+		}
+		if (day === "1mo") {
+			str = "http://0.0.0.0:5000/?stock=AAPL&interval=1mo"
+		}
 	}
-	if (value === "APPL") {
-		str = "http://localhost:5000/?stock=AAPL&interval=1mo"
-	}
+
 	const promiseMSFT = fetch(str)
 		.then(response => response.text())
 		.then(data => tsvParse(data, parseData(parseDate)))
