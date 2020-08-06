@@ -133,7 +133,9 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 						orient="right"
 						displayFormat={format(".2f")} />
 					<OHLCTooltip origin={[-40, 0]}/>
-					<CandlestickSeries />
+					<CandlestickSeries fill={(d) => 
+							d.open === d.low ? "rgb(255,255,0)" : d.close < d.open ? "rgb(0,166,81)" : "rgb(204,36,36)" }
+						/>
 					{boolinger}
 					{ema_20}
 					{ema_20_cord}
