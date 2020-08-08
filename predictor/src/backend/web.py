@@ -52,7 +52,6 @@ def get_interval():
     return (interval)
 
 def prediction_ia(stock_symbol, interval, model_path):
-    print('here')
     stocks_data = generate_model_on_stock(stock_symbol, interval)
     scaler = load(f'{model_path}/std_scaler.bin')
     model = tensorflow.keras.models.load_model(model_path)
