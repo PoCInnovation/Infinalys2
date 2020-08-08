@@ -29,8 +29,6 @@ class ChartComponent extends React.Component {
     if (this.props.trade !== this.state.tmp_trade || this.props.day !== this.state.tmp_day) {
       this.setState({tmp_trade: this.props.trade}, function () {
         this.setState({tmp_day: this.props.day}, function() {
-          console.log(this.state.tmp_day)
-          console.log(this.state.tmp_trade)
           getData(this.state.tmp_trade, this.state.tmp_day).then(data => {
             this.setState({ data })
           })
@@ -49,18 +47,15 @@ class ChartComponent extends React.Component {
         {type => <Chart
         type={type}
         data={this.state.data}
-        Boll={this.props.bolinger}
-        EMA_20={this.props.ema_20}
-        SMA_20={this.props.sma_20}
-        EMA_50={this.props.ema_50}
+        // Boll={this.props.bolinger}
+        // EMA_20={this.props.ema_20}
+        // SMA_20={this.props.sma_20}
+        // EMA_50={this.props.ema_50}
         />}
 			</TypeChooser>
 		)
 	}
 }
-
-
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -85,7 +80,10 @@ function App() {
     sma_20: false,
     ema_50: false,
   });
-
+  
+  const [daytime, setdaytime] = React.useState("");
+  const [boursse, setbourse] = React.useState("");
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
   
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -96,17 +94,13 @@ function App() {
     setSelectedIndex(index)
   };
   
-  const [daytime, setdaytime] = React.useState("");
-  const [boursse, setbourse] = React.useState("");
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  console.log(daytime)
     return(
       <div>
           <Grid container spacing={1}>
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
+            <Grid item xs={12}>
+              {/* <Paper className={fixedHeightPaper}> */}
                 <ChartComponent bolinger={state.Boll} ema_20={state.ema_20} ema_50={state.ema_50} sma_20={state.sma_20} trade={boursse} day={daytime}/>
-              </Paper>
+              {/* </Paper> */}
             </Grid>
             <Grid item xs>
             <Paper className={fixedHeightPaper}>
@@ -142,9 +136,9 @@ function App() {
                   </ListItemIcon>
                   <ListItemText primary="AAPL" />
                   <ButtonGroup variant="contained" color="primary">
-                    <Button onClick={() => { setdaytime("1d")}}>1D</Button>
-                    <Button onClick={() => { setdaytime("1wk")}}>1W</Button>
-                    <Button onClick={() => { setdaytime("1mo")}}>1M</Button>
+                    <Button onClick={() => {setdaytime("1d")}}>1D</Button>
+                    <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
+                    <Button onClick={() => {setdaytime("1mo")}}>1M</Button>
                   </ButtonGroup>
                 </ListItem>
                 <ListItem button selected={selectedIndex === 1} onClick={(event) => handleListItemClick(event, 1, "SBUX")}>
@@ -153,16 +147,16 @@ function App() {
                   </ListItemIcon>
                   <ListItemText primary="SBUX" />
                   <ButtonGroup variant="contained" color="primary">
-                    <Button onClick={() => { setdaytime("1d")}}>1D</Button>
-                    <Button onClick={() => { setdaytime("1wk")}}>1W</Button>
-                    <Button onClick={() => { setdaytime("1mo")}}>1M</Button>
+                    <Button onClick={() => {setdaytime("1d")}}>1D</Button>
+                    <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
+                    <Button onClick={() => {setdaytime("1mo")}}>1M</Button>
                   </ButtonGroup>
                 </ListItem>
               </List>
               </Paper>
             </Grid>
           </Grid>
-      </div>
+        </div>
     );
 }
 

@@ -1,62 +1,89 @@
+
 import React from "react";
 import PropTypes from "prop-types";
+
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
+
 import { ChartCanvas, Chart } from "react-stockcharts";
 import {
+	BarSeries,
+	AreaSeries,
 	CandlestickSeries,
-	BollingerSeries,
 	LineSeries,
+	MACDSeries,
 } from "react-stockcharts/lib/series";
 import { XAxis, YAxis } from "react-stockcharts/lib/axes";
 import {
+	CrossHairCursor,
+	EdgeIndicator,
+	CurrentCoordinate,
 	MouseCoordinateX,
 	MouseCoordinateY,
-	CurrentCoordinate,
 } from "react-stockcharts/lib/coordinates";
-import { discontinuousTimeScaleProvider } from "react-stockcharts/lib/scale";
-import { OHLCTooltip, MovingAverageTooltip, BollingerBandTooltip } from "react-stockcharts/lib/tooltip";
-import { ema, sma, bollingerBand } from "react-stockcharts/lib/indicator";
-import { fitWidth } from "react-stockcharts/lib/helper";
-import { last } from "react-stockcharts/lib/utils";
 
-const bbStroke = {
-	top: "#964B00",
-	middle: "#000000",
-	bottom: "#964B00",
+import { discontinuousTimeScaleProvider } from "react-stockcharts/lib/scale";
+import {
+	OHLCTooltip,
+	MovingAverageTooltip,
+	MACDTooltip,
+} from "react-stockcharts/lib/tooltip";
+import { ema, macd, sma } from "react-stockcharts/lib/indicator";
+import { fitWidth } from "react-stockcharts/lib/helper";
+
+const macdAppearance = {
+	stroke: {
+		macd: "#FF0000",
+		signal: "#00F300",
+	},
+	fill: {
+		divergence: "#4682B4"
+	},
 };
 
-const bbFill = "#4682B4";
+const mouseEdgeAppearance = {
+	textFill: "#542605",
+	stroke: "#05233B",
+	strokeOpacity: 1,
+	strokeWidth: 3,
+	arrowWidth: 5,
+	fill: "#BCDEFA",
+};
 
-class CandleStickChartWithBollingerBandOverlay extends React.Component {
+class CandleStickChartWithMACDIndicator extends React.Component {
 	render() {
-		const ema20 = ema()
+		const { type, data: initialData, width, ratio } = this.props;
+		const ema26 = ema()
+			.id(0)
+			.options({ windowSize: 26 })
+			.merge((d, c) => { d.ema26 = c; })
+			.accessor(d => d.ema26);
+
+		const ema12 = ema()
+			.id(1)
+			.options({ windowSize: 12 })
+			.merge((d, c) => {d.ema12 = c;})
+			.accessor(d => d.ema12);
+
+		const macdCalculator = macd()
 			.options({
-				windowSize: 20, // optional will default to 10
-				sourcePath: "close", // optional will default to close as the source
+				fast: 12,
+				slow: 26,
+				signal: 9,
 			})
-			.skipUndefined(true) // defaults to true
-			.merge((d, c) => {d.ema20 = c;}) // Required, if not provided, log a error
-			.accessor(d => d.ema20) // Required, if not provided, log an error during calculation
-			.stroke("blue"); // Optional
+			.merge((d, c) => {d.macd = c;})
+			.accessor(d => d.macd);
 
-		const sma20 = sma()
-			.options({ windowSize: 20 })
-			.merge((d, c) => {d.sma20 = c;})
-			.accessor(d => d.sma20);
+		const smaVolume50 = sma()
+			.id(3)
+			.options({
+				windowSize: 50,
+				sourcePath: "volume",
+			})
+			.merge((d, c) => {d.smaVolume50 = c;})
+			.accessor(d => d.smaVolume50);
 
-		const ema50 = ema()
-			.options({ windowSize: 50 })
-			.merge((d, c) => {d.ema50 = c;})
-			.accessor(d => d.ema50);
-
-		const bb = bollingerBand()
-			.merge((d, c) => {d.bb = c;})
-			.accessor(d => d.bb);
-
-		const { type, data: initial_data, width, ratio, Boll, EMA_20, EMA_50 ,SMA_20 } = this.props;
-
-		const calculatedData = ema20(sma20(ema50(bb(initial_data)))); // const calculatedData = ema20(sma20(ema50(smaVolume50(bb(initialData)))));
+		const calculatedData = smaVolume50(macdCalculator(ema12(ema26(initialData))));
 		const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => d.date);
 		const {
@@ -65,148 +92,133 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
 			xAccessor,
 			displayXAccessor,
 		} = xScaleProvider(calculatedData);
-		const start = xAccessor(last(data));
-		const end = xAccessor(data[Math.max(0, data.length - 150)]);
-		const xExtents = [start, end];
-		
-		let boolinger;
-		if (Boll) {
-			boolinger = <BollingerSeries yAccessor={d => d.bb} stroke={bbStroke} fill={bbFill} />
-		} else {
-			boolinger = <div></div>
-		}
-		let ema_20;
-		let ema_20_cord;
-		if (EMA_20) {
-			ema_20 = <LineSeries yAccessor={ema20.accessor()} stroke={ema20.stroke()}/>
-			ema_20_cord = <CurrentCoordinate yAccessor={ema20.accessor()} fill={ema20.stroke()} />
-		} else {
-			ema_20 = <div></div>
-			ema_20_cord = <div></div>
-		}
-		let ema_50;
-		let ema_50_cord;
-		if (EMA_50) {
-			ema_50 = <LineSeries yAccessor={ema50.accessor()} stroke={ema50.stroke()}/>
-			ema_50_cord = <CurrentCoordinate yAccessor={ema50.accessor()} fill={ema50.stroke()} />
-		} else {
-			ema_50 = <div></div>
-			ema_50_cord = <div></div>
-		}
-		let sma_20;
-		let sma_20_cord;
-		if (SMA_20) {
-			sma_20 = <LineSeries yAccessor={sma20.accessor()} stroke={sma20.stroke()}/>
-			sma_20_cord = <CurrentCoordinate yAccessor={sma20.accessor()} fill={sma20.stroke()} />
-		} else {
-			sma_20 = <div></div>
-			sma_20_cord = <div></div>
-		}
+
 		return (
-			<ChartCanvas height={400}
+			<ChartCanvas height={600}
 				width={width}
 				ratio={ratio}
-				margin={{ left: 70, right: 70, top: 10, bottom: 30 }}
+				margin={{ left: 70, right: 70, top: 20, bottom: 30 }}
 				type={type}
 				seriesName="MSFT"
 				data={data}
 				xScale={xScale}
 				xAccessor={xAccessor}
 				displayXAccessor={displayXAccessor}
-				xExtents={xExtents}
 			>
-				<Chart id={1}
-					yExtents = {[d => [d.high, d.low], bb.accessor()]}
-					onContextMenu={(...rest) => { console.log("chart - context menu", rest); }}
+				<Chart id={1} height={400}
+					yExtents={[d => [d.high, d.low], ema26.accessor(), ema12.accessor()]}
+					padding={{ top: 10, bottom: 20 }}
 				>
-					<XAxis axisAt="bottom" orient="bottom"/>
-					<YAxis axisAt="right" orient="right" ticks={5}
-						onDoubleClick={(...rest) => { console.log("yAxis - double click", rest); }}
-						onContextMenu={(...rest) => { console.log("yAxis - context menu", rest); }}
-					/>
-					<MouseCoordinateX
-						at="bottom"
-						orient="bottom"
-						displayFormat={timeFormat("%Y-%m-%d")} />
+					<XAxis axisAt="bottom" orient="bottom" showTicks={false} outerTickSize={0} />
+					<YAxis axisAt="right" orient="right" ticks={5} />
+
 					<MouseCoordinateY
 						at="right"
 						orient="right"
-						displayFormat={format(".2f")} />
+						displayFormat={format(".2f")}
+						{...mouseEdgeAppearance}
+					/>
+
+					<CandlestickSeries />
+					<LineSeries yAccessor={ema26.accessor()} stroke={ema26.stroke()}/>
+					<LineSeries yAccessor={ema12.accessor()} stroke={ema12.stroke()}/>
+
+					<CurrentCoordinate yAccessor={ema26.accessor()} fill={ema26.stroke()} />
+					<CurrentCoordinate yAccessor={ema12.accessor()} fill={ema12.stroke()} />
+
+					<EdgeIndicator itemType="last" orient="right" edgeAt="right"
+						yAccessor={d => d.close}
+						fill={d => d.close > d.open ? "#A2F5BF" : "#F9ACAA"}
+						stroke={d => d.close > d.open ? "#0B4228" : "#6A1B19"}
+						textFill={d => d.close > d.open ? "#0B4228" : "#420806"}
+						strokeOpacity={1}
+						strokeWidth={3}
+						arrowWidth={2}
+					/>
+
 					<OHLCTooltip origin={[-40, 0]}/>
-					<CandlestickSeries fill={(d) => 
-							d.open === d.low ? "rgb(255,255,0)" : d.close > d.open ? "rgb(0,166,81)" : "rgb(204,36,36)" }
-						/>
-					{boolinger}
-					{ema_20}
-					{ema_20_cord}
-					{ema_50}
-					{ema_50_cord}
-					{sma_20}
-					{sma_20_cord}
-					<BollingerBandTooltip
-						origin={[-38, 60]}
-						yAccessor={d => d.bb}
-						options={bb.options()} />
-					
-					
 					<MovingAverageTooltip
 						onClick={e => console.log(e)}
 						origin={[-38, 15]}
 						options={[
 							{
-								yAccessor: sma20.accessor(),
-								type: sma20.type(),
-								stroke: sma20.stroke(),
-								windowSize: sma20.options().windowSize,
-							},]}/>
-					<MovingAverageTooltip
-						onClick={e => console.log(e)}
-						origin={[-38, 15]}
-						options={[
-							{
-								yAccessor: sma20.accessor(),
-								type: sma20.type(),
-								stroke: sma20.stroke(),
-								windowSize: sma20.options().windowSize,
+								yAccessor: ema26.accessor(),
+								type: "EMA",
+								stroke: ema26.stroke(),
+								windowSize: ema26.options().windowSize,
 							},
 							{
-								yAccessor: ema20.accessor(),
-								type: ema20.type(),
-								stroke: ema20.stroke(),
-								windowSize: ema20.options().windowSize,
-							},
-							{
-								yAccessor: ema50.accessor(),
-								type: ema50.type(),
-								stroke: ema50.stroke(),
-								windowSize: ema50.options().windowSize,
+								yAccessor: ema12.accessor(),
+								type: "EMA",
+								stroke: ema12.stroke(),
+								windowSize: ema12.options().windowSize,
 							},
 						]}
 					/>
 				</Chart>
+				<Chart id={2} height={150}
+					yExtents={[d => d.volume, smaVolume50.accessor()]}
+					origin={(w, h) => [0, h - 300]}
+				>
+					<YAxis axisAt="left" orient="left" ticks={5} tickFormat={format(".2s")}/>
+
+					<MouseCoordinateY
+						at="left"
+						orient="left"
+						displayFormat={format(".4s")}
+						{...mouseEdgeAppearance}
+					/>
+
+					<BarSeries yAccessor={d => d.volume} fill={d => d.close > d.open ? "#6BA583" : "#FF0000"} />
+					<AreaSeries yAccessor={smaVolume50.accessor()} stroke={smaVolume50.stroke()} fill={smaVolume50.fill()}/>
+				</Chart>
+				<Chart id={3} height={150}
+					yExtents={macdCalculator.accessor()}
+					origin={(w, h) => [0, h - 150]} padding={{ top: 10, bottom: 10 }}
+				>
+					<XAxis axisAt="bottom" orient="bottom"/>
+					<YAxis axisAt="right" orient="right" ticks={2} />
+
+					<MouseCoordinateX
+						at="bottom"
+						orient="bottom"
+						displayFormat={timeFormat("%Y-%m-%d")}
+						rectRadius={5}
+						{...mouseEdgeAppearance}
+					/>
+					<MouseCoordinateY
+						at="right"
+						orient="right"
+						displayFormat={format(".2f")}
+						{...mouseEdgeAppearance}
+					/>
+
+					<MACDSeries yAccessor={d => d.macd}
+						{...macdAppearance} />
+					<MACDTooltip
+						origin={[-38, 15]}
+						yAccessor={d => d.macd}
+						options={macdCalculator.options()}
+						appearance={macdAppearance}
+					/>
+				</Chart>
+				<CrossHairCursor />
 			</ChartCanvas>
 		);
 	}
 }
 
-CandleStickChartWithBollingerBandOverlay.propTypes = {
-	SMA_20: PropTypes.bool.isRequired,
-	EMA_20: PropTypes.bool.isRequired,
-	EMA_50: PropTypes.bool.isRequired,
-	Boll: PropTypes.bool.isRequired,
+CandleStickChartWithMACDIndicator.propTypes = {
 	data: PropTypes.array.isRequired,
 	width: PropTypes.number.isRequired,
 	ratio: PropTypes.number.isRequired,
 	type: PropTypes.oneOf(["svg", "hybrid"]).isRequired,
 };
 
-CandleStickChartWithBollingerBandOverlay.defaultProps = {
-	SMA_20: Boolean,
-	EMA_20: Boolean,
-	EMA_50: Boolean,
-	Boll: Boolean,
+CandleStickChartWithMACDIndicator.defaultProps = {
 	type: "svg",
 };
-CandleStickChartWithBollingerBandOverlay = fitWidth(CandleStickChartWithBollingerBandOverlay);
 
-export default CandleStickChartWithBollingerBandOverlay;
+CandleStickChartWithMACDIndicator = fitWidth(CandleStickChartWithMACDIndicator);
+
+export default CandleStickChartWithMACDIndicator;
