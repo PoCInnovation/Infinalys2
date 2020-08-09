@@ -16,6 +16,9 @@ function parseData(parse) {
 		d.low = +d.Low;
 		d.close = +d.Close;
 		d.volume = +d.Volume;
+		if (d.volume === 0) {
+			console.log(d)
+		}
 		return d;
 	};
 }
@@ -39,15 +42,27 @@ export function getData(trade, day) {
 		}
 	}
 
-	if (trade === "AAPL") {
+	if (trade === "GOGL") {
 		if (day === "1d") {
-			str = "http://0.0.0.0:5000/?stock=AAPL&interval=1d"
+			str = "http://0.0.0.0:5000/?stock=GOGL&interval=1d"
 		}
 		if (day === "1wk") {
-			str = "http://0.0.0.0:5000/?stock=AAPL&interval=1wk"
+			str = "http://0.0.0.0:5000/?stock=GOGL&interval=1wk"
 		}
 		if (day === "1mo") {
-			str = "http://0.0.0.0:5000/?stock=AAPL&interval=1mo"
+			str = "http://0.0.0.0:5000/?stock=GOGL&interval=1mo"
+		}
+	}
+
+	if (trade === "AMZN") {
+		if (day === "1d") {
+			str = "http://0.0.0.0:5000/?stock=AMZN&interval=1d"
+		}
+		if (day === "1wk") {
+			str = "http://0.0.0.0:5000/?stock=AMZN&interval=1wk"
+		}
+		if (day === "1mo") {
+			str = "http://0.0.0.0:5000/?stock=AMZN&interval=1mo"
 		}
 	}
 

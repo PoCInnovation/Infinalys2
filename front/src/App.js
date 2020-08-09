@@ -32,6 +32,7 @@ class ChartComponent extends React.Component {
           getData(this.state.tmp_trade, this.state.tmp_day).then(data => {
             this.setState({ data })
           })
+          
         })
       });
 
@@ -47,10 +48,11 @@ class ChartComponent extends React.Component {
         {type => <Chart
         type={type}
         data={this.state.data}
-        // Boll={this.props.bolinger}
-        // EMA_20={this.props.ema_20}
-        // SMA_20={this.props.sma_20}
-        // EMA_50={this.props.ema_50}
+        Boll={this.props.bolinger}
+        EMA_20={this.props.ema_20}
+        SMA_20={this.props.sma_20}
+        EMA_50={this.props.ema_50}
+        VOLUME={this.props.volume}
         />}
 			</TypeChooser>
 		)
@@ -79,6 +81,7 @@ function App() {
     ema_20: false,
     sma_20: false,
     ema_50: false,
+    Volume: false,
   });
   
   const [daytime, setdaytime] = React.useState("");
@@ -98,9 +101,15 @@ function App() {
       <div>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              {/* <Paper className={fixedHeightPaper}> */}
-                <ChartComponent bolinger={state.Boll} ema_20={state.ema_20} ema_50={state.ema_50} sma_20={state.sma_20} trade={boursse} day={daytime}/>
-              {/* </Paper> */}
+                <ChartComponent 
+                  bolinger={state.Boll} 
+                  volume={state.Volume}
+                  ema_20={state.ema_20} 
+                  ema_50={state.ema_50} 
+                  sma_20={state.sma_20} 
+                  trade={boursse} 
+                  day={daytime}
+                />
             </Grid>
             <Grid item xs>
             <Paper className={fixedHeightPaper}>
@@ -109,6 +118,10 @@ function App() {
                   <FormControlLabel control={<Checkbox checked={state.Boll} onChange={handleChange} name="Boll" color={"primary"}/>}
                     label="Bolinger"
                   />
+                  <FormControlLabel control={<Checkbox checked={state.Volume} onChange={handleChange} name="Volume" color={"primary"}/>}
+                    label="Volume"
+                  />
+
                   <FormControlLabel control={<Checkbox checked={state.sma_20} onChange={handleChange} name="sma_20" color={"primary"}/>}
                     label="sma20"
                   />
@@ -122,7 +135,7 @@ function App() {
                   />
                 </ListItem>
                 <ListItem>
-                  <Paper elevation={3}/>
+                  <Paper elevation={4}/>
                 </ListItem>
               </List>
             </Paper>
@@ -130,11 +143,11 @@ function App() {
             <Grid item xs>
             <Paper className={fixedHeightPaper}>
               <List>
-                <ListItem button selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 0, "AAPL")}>
+                <ListItem button selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 0, "GOGL")}>
                   <ListItemIcon>
                     <ShowChartIcon />
                   </ListItemIcon>
-                  <ListItemText primary="AAPL" />
+                  <ListItemText primary="GOGL" />
                   <ButtonGroup variant="contained" color="primary">
                     <Button onClick={() => {setdaytime("1d")}}>1D</Button>
                     <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
@@ -146,6 +159,17 @@ function App() {
                     <ShowChartIcon />
                   </ListItemIcon>
                   <ListItemText primary="SBUX" />
+                  <ButtonGroup variant="contained" color="primary">
+                    <Button onClick={() => {setdaytime("1d")}}>1D</Button>
+                    <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
+                    <Button onClick={() => {setdaytime("1mo")}}>1M</Button>
+                  </ButtonGroup>
+                </ListItem>
+                <ListItem button selected={selectedIndex === 2} onClick={(event) => handleListItemClick(event, 1, "AMZN")}>
+                  <ListItemIcon>
+                    <ShowChartIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="AMZN" />
                   <ButtonGroup variant="contained" color="primary">
                     <Button onClick={() => {setdaytime("1d")}}>1D</Button>
                     <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
