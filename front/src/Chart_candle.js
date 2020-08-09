@@ -8,16 +8,12 @@ import {
 	BollingerSeries,
 	LineSeries,
 	BarSeries,
-	AreaSeries,
-	RSISeries,
 } from "react-stockcharts/lib/series";
 import { XAxis, YAxis } from "react-stockcharts/lib/axes";
 import {
-	CrossHairCursor,
 	MouseCoordinateX,
 	MouseCoordinateY,
 	CurrentCoordinate,
-	RSITooltip,
 } from "react-stockcharts/lib/coordinates";
 import { discontinuousTimeScaleProvider } from "react-stockcharts/lib/scale";
 import { OHLCTooltip, MovingAverageTooltip, BollingerBandTooltip } from "react-stockcharts/lib/tooltip";
