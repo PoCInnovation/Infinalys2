@@ -147,7 +147,7 @@ function App() {
                   <ListItemIcon>
                     <ShowChartIcon />
                   </ListItemIcon>
-                  <ListItemText primary="GOOGL" />
+                  <ListItemText primary="Google" />
                   <ButtonGroup variant="contained" color="primary">
                     <Button onClick={() => {setdaytime("1d")}}>1D</Button>
                     <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
@@ -158,29 +158,51 @@ function App() {
                   <ListItemIcon>
                     <ShowChartIcon />
                   </ListItemIcon>
-                  <ListItemText primary="SBUX" />
+                  <ListItemText primary="STARBUX" />
                   <ButtonGroup variant="contained" color="primary">
                     <Button onClick={() => {setdaytime("1d")}}>1D</Button>
                     <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
                     <Button onClick={() => {setdaytime("1mo")}}>1M</Button>
                   </ButtonGroup>
                 </ListItem>
-                <ListItem button selected={selectedIndex === 2} onClick={(event) => handleListItemClick(event, 1, "AMZN")}>
+                <ListItem button selected={selectedIndex === 2} onClick={(event) => handleListItemClick(event, 2, "AMZN")}>
                   <ListItemIcon>
                     <ShowChartIcon />
                   </ListItemIcon>
-                  <ListItemText primary="AMZN" />
+                  <ListItemText primary="Amazon" />
                   <ButtonGroup variant="contained" color="primary">
                     <Button onClick={() => {setdaytime("1d")}}>1D</Button>
                     <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
                     <Button onClick={() => {setdaytime("1mo")}}>1M</Button>
                   </ButtonGroup>
                 </ListItem>
-                <ListItem button selected={selectedIndex === 3} onClick={(event) => handleListItemClick(event, 1, "^FCHI")}>
+                <ListItem button selected={selectedIndex === 3} onClick={(event) => handleListItemClick(event, 3, "^FCHI")}>
                   <ListItemIcon>
                     <ShowChartIcon />
                   </ListItemIcon>
-                  <ListItemText primary="^FCHI" />
+                  <ListItemText primary="CAC 40" />
+                  <ButtonGroup variant="contained" color="primary">
+                    <Button onClick={() => {setdaytime("1d")}}>1D</Button>
+                    <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
+                    <Button onClick={() => {setdaytime("1mo")}}>1M</Button>
+                  </ButtonGroup>
+                </ListItem>
+                <ListItem button selected={selectedIndex === 4} onClick={(event) => handleListItemClick(event, 4, "FB")}>
+                  <ListItemIcon>
+                    <ShowChartIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Facebook" />
+                  <ButtonGroup variant="contained" color="primary">
+                    <Button onClick={() => {setdaytime("1d")}}>1D</Button>
+                    <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
+                    <Button onClick={() => {setdaytime("1mo")}}>1M</Button>
+                  </ButtonGroup>
+                </ListItem>
+                <ListItem button selected={selectedIndex === 5} onClick={(event) => handleListItemClick(event, 5, "GOLD")}>
+                  <ListItemIcon>
+                    <ShowChartIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Or" />
                   <ButtonGroup variant="contained" color="primary">
                     <Button onClick={() => {setdaytime("1d")}}>1D</Button>
                     <Button onClick={() => {setdaytime("1wk")}}>1W</Button>

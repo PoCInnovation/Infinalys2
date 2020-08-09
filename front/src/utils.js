@@ -16,9 +16,9 @@ function parseData(parse) {
 		d.low = +d.Low;
 		d.close = +d.Close;
 		d.volume = +d.Volume;
-		// if (d.volume === 0) {
-		// 	console.log(d)
-		// }
+		if (d.volume === 0) {
+			console.log(d)
+		}
 		return d;
 	};
 }
@@ -75,6 +75,30 @@ export function getData(trade, day) {
 		}
 		if (day === "1mo") {
 			str = "http://0.0.0.0:5000/?stock=^FCHI&interval=1mo"
+		}
+	}
+
+	if (trade === "FB") {
+		if (day === "1d") {
+			str = "http://0.0.0.0:5000/?stock=FB&interval=1d"
+		}
+		if (day === "1wk") {
+			str = "http://0.0.0.0:5000/?stock=FB&interval=1wk"
+		}
+		if (day === "1mo") {
+			str = "http://0.0.0.0:5000/?stock=FB&interval=1mo"
+		}
+	}
+
+	if (trade === "GOLD") {
+		if (day === "1d") {
+			str = "http://0.0.0.0:5000/?stock=GOLD&interval=1d"
+		}
+		if (day === "1wk") {
+			str = "http://0.0.0.0:5000/?stock=GOLD&interval=1wk"
+		}
+		if (day === "1mo") {
+			str = "http://0.0.0.0:5000/?stock=GOLD&interval=1mo"
 		}
 	}
 
