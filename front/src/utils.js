@@ -42,15 +42,15 @@ export function getData(trade, day) {
 		}
 	}
 
-	if (trade === "GOGL") {
+	if (trade === "GOOGL") {
 		if (day === "1d") {
-			str = "http://0.0.0.0:5000/?stock=GOGL&interval=1d"
+			str = "http://0.0.0.0:5000/?stock=GOOGL&interval=1d"
 		}
 		if (day === "1wk") {
-			str = "http://0.0.0.0:5000/?stock=GOGL&interval=1wk"
+			str = "http://0.0.0.0:5000/?stock=GOOGL&interval=1wk"
 		}
 		if (day === "1mo") {
-			str = "http://0.0.0.0:5000/?stock=GOGL&interval=1mo"
+			str = "http://0.0.0.0:5000/?stock=GOOGL&interval=1mo"
 		}
 	}
 

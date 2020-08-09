@@ -143,11 +143,11 @@ function App() {
             <Grid item xs>
             <Paper className={fixedHeightPaper}>
               <List>
-                <ListItem button selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 0, "GOGL")}>
+                <ListItem button selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 0, "GOOGL")}>
                   <ListItemIcon>
                     <ShowChartIcon />
                   </ListItemIcon>
-                  <ListItemText primary="GOGL" />
+                  <ListItemText primary="GOOGL" />
                   <ButtonGroup variant="contained" color="primary">
                     <Button onClick={() => {setdaytime("1d")}}>1D</Button>
                     <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
