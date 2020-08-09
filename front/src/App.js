@@ -176,6 +176,17 @@ function App() {
                     <Button onClick={() => {setdaytime("1mo")}}>1M</Button>
                   </ButtonGroup>
                 </ListItem>
+                <ListItem button selected={selectedIndex === 3} onClick={(event) => handleListItemClick(event, 1, "^FCHI")}>
+                  <ListItemIcon>
+                    <ShowChartIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="^FCHI" />
+                  <ButtonGroup variant="contained" color="primary">
+                    <Button onClick={() => {setdaytime("1d")}}>1D</Button>
+                    <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
+                    <Button onClick={() => {setdaytime("1mo")}}>1M</Button>
+                  </ButtonGroup>
+                </ListItem>
               </List>
               </Paper>
             </Grid>

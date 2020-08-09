@@ -65,6 +65,18 @@ export function getData(trade, day) {
 			str = "http://0.0.0.0:5000/?stock=AMZN&interval=1mo"
 		}
 	}
+	
+	if (trade === "^FCHI") {
+		if (day === "1d") {
+			str = "http://0.0.0.0:5000/?stock=^FCHI&interval=1d"
+		}
+		if (day === "1wk") {
+			str = "http://0.0.0.0:5000/?stock=^FCHI&interval=1wk"
+		}
+		if (day === "1mo") {
+			str = "http://0.0.0.0:5000/?stock=^FCHI&interval=1mo"
+		}
+	}
 
 	const promiseMSFT = fetch(str)
 		.then(response => response.text())
