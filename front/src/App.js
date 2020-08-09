@@ -84,7 +84,7 @@ function App() {
     Volume: false,
   });
   
-  const [daytime, setdaytime] = React.useState("");
+  const [daytime, setdaytime] = React.useState("1d");
   const [boursse, setbourse] = React.useState("");
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   
@@ -182,7 +182,7 @@ function App() {
                   </ListItemIcon>
                   <ListItemText primary="CAC 40" />
                   <ButtonGroup variant="contained" color="primary">
-                    <Button onClick={() => {setdaytime("1d")}}>1D</Button>
+                    {/* <Button onClick={() => {setdaytime("1d")}}>1D</Button> */}
                     <Button onClick={() => {setdaytime("1wk")}}>1W</Button>
                     <Button onClick={() => {setdaytime("1mo")}}>1M</Button>
                   </ButtonGroup>
