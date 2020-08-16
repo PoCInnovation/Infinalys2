@@ -26,7 +26,7 @@ function parseData(parse) {
 // https://cdn.rawgit.com/rrag/react-stockcharts/master/docs/data/MSFT.tsv
 // http://0.0.0.0:5000/?stock=AAPL&interval=3mo
 
-export function getData(trade, day) {
+export default function getData(trade, day) {
   const promiseMSFT = fetch(`http://0.0.0.0:5000/?stock=${trade}&interval=${day}`)
     .then((response) => response.text())
     .then((data) => tsvParse(data, parseData(parseDate)));

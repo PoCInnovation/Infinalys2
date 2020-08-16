@@ -6,20 +6,22 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 
-function BoursseFront(props) {
+function StockExchange({
+  selected, handle, label, scope,
+}) {
   return (
-    <ListItem button selected={props.selected} onClick={props.Handle}>
+    <ListItem button selected={selected} onClick={handle}>
       <ListItemIcon>
         <ShowChartIcon />
       </ListItemIcon>
-      <ListItemText primary={props.Label} />
+      <ListItemText primary={label} />
       <ButtonGroup variant="contained" color="primary">
-        <Button onClick={() => { props.DAY('1d'); }}>1D</Button>
-        <Button onClick={() => { props.DAY('1wk'); }}>1W</Button>
-        <Button onClick={() => { props.DAY('1mo'); }}>1M</Button>
+        <Button onClick={() => { scope('1d'); }}>1D</Button>
+        <Button onClick={() => { scope('1wk'); }}>1W</Button>
+        <Button onClick={() => { scope('1mo'); }}>1M</Button>
       </ButtonGroup>
     </ListItem>
   );
 }
 
-export default BoursseFront;
+export default StockExchange;
