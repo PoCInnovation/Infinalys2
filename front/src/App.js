@@ -1,16 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-
 import CssBaseline from '@material-ui/core/CssBaseline';
-
-import CheckboxFront from './CheckboxFront';
-import ChartComponent from './ChartComponent';
-import BoursseFront from './BoursseFront';
+import Checkbox from './components/Checkbox';
+import ChartComponent from './components/Chart';
+import StockExchange from './components/StockExchange';
 
 const themeLight = createMuiTheme({
   palette: {
@@ -46,57 +44,65 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const [light, setLight] = React.useState(false);
-  const [state, setState] = React.useState({
-    Boll: false,
+  const [isLightTheme, setIsLightTheme] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scope, setScope] = useState('1d');
+  const [trade, setTrade] = useState('');
+  const [state, setState] = useState({
+    boll: false,
+    volume: false,
     ema_20: false,
     sma_20: false,
     ema_50: false,
-    Volume: false,
   });
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  const [daytime, setdaytime] = React.useState('1d');
-  const [boursse, setbourse] = React.useState('');
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 
-  const handleListItemClick = (index, indexBoursse) => {
-    setbourse(indexBoursse);
+  const handleListItemClick = (index, indexStock) => {
+    setTrade(indexStock);
     setSelectedIndex(index);
   };
 
+  const stockData = [
+    { index: 'GOOGL', label: 'Google' },
+    { index: 'SBUX', label: 'Starbucks' },
+    { index: 'AMZN', label: 'Amazon' },
+    { index: '^FCHI', label: 'CAC 40' },
+    { index: 'FB', label: 'Facebook' },
+    { index: 'GOLD', label: 'Or' },
+  ];
+
   return (
     <div>
-      <MuiThemeProvider theme={light ? themeLight : themeDark}>
+      <MuiThemeProvider theme={isLightTheme ? themeLight : themeDark}>
         <CssBaseline />
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <ChartComponent
-              bolinger={state.Boll}
-              volume={state.Volume}
+              bollinger={state.boll}
+              volume={state.volume}
               ema_20={state.ema_20}
               ema_50={state.ema_50}
               sma_20={state.sma_20}
-              trade={boursse}
-              day={daytime}
+              trade={trade}
+              day={scope}
             />
           </Grid>
           <Grid item xs>
             <Paper className={fixedHeightPaper} elevation={4}>
               <List>
                 <ListItem>
-                  <CheckboxFront Status={state.Boll} Func={handleChange} Name="Boll" Label="bollinger" />
-                  <CheckboxFront Status={state.Volume} Func={handleChange} Name="Volume" Label="Volume" />
-                  <CheckboxFront Status={state.sma_20} Func={handleChange} Name="sma_20" Label="sma20" />
+                  <Checkbox status={state.boll} effect={handleChange} name="boll" label="Bollinger" />
+                  <Checkbox status={state.volume} effect={handleChange} name="volume" label="Volume" />
+                  <Checkbox status={state.sma_20} effect={handleChange} name="sma_20" label="sma20" />
                 </ListItem>
                 <ListItem>
-                  <CheckboxFront Status={state.ema_20} Func={handleChange} Name="ema_20" Label="ema20" />
-                  <CheckboxFront Status={state.ema_50} Func={handleChange} Name="ema_50" Label="ema50" />
+                  <Checkbox status={state.ema_20} effect={handleChange} name="ema_20" label="ema20" />
+                  <Checkbox status={state.ema_50} effect={handleChange} name="ema_50" label="ema50" />
                 </ListItem>
               </List>
             </Paper>
@@ -104,12 +110,16 @@ function App() {
           <Grid item xs>
             <Paper className={fixedHeightPaper} elevation={4}>
               <List>
-                <BoursseFront Selected={selectedIndex === 0} Handle={() => handleListItemClick(0, 'GOOGL')} Label="Google" DAY={setdaytime} />
-                <BoursseFront Selected={selectedIndex === 1} Handle={() => handleListItemClick(1, 'SBUX')} Label="Starbux" DAY={setdaytime} />
-                <BoursseFront Selected={selectedIndex === 2} Handle={() => handleListItemClick(2, 'AMZN')} Label="Amazon" DAY={setdaytime} />
-                <BoursseFront Selected={selectedIndex === 3} Handle={() => handleListItemClick(3, '^FCHI')} Label="CAC 40" DAY={setdaytime} />
-                <BoursseFront Selected={selectedIndex === 4} Handle={() => handleListItemClick(4, 'FB')} Label="Facebook" DAY={setdaytime} />
-                <BoursseFront Selected={selectedIndex === 5} Handle={() => handleListItemClick(5, 'GOLD')} Label="Or" DAY={setdaytime} />
+                {
+                  stockData.map((stock, index) => (
+                    <StockExchange
+                      selected={selectedIndex === index}
+                      handle={() => handleListItemClick(index, stock.index)}
+                      label={stock.label}
+                      scope={setScope}
+                    />
+                  ))
+                }
               </List>
             </Paper>
           </Grid>

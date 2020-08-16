@@ -1,9 +1,9 @@
 import React from 'react';
 import { TypeChooser } from 'react-stockcharts/lib/helper';
-import Chart from './Chart_candle';
-import { getData } from './utils';
+import CandleChart from './CandleChart';
+import getData from '../utils';
 
-class ChartComponent extends React.Component {
+class Chart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,7 +32,7 @@ class ChartComponent extends React.Component {
     return (
       <TypeChooser>
         {(type) => (
-          <Chart
+          <CandleChart
             type={type}
             data={this.state.data}
             Boll={this.props.bolinger}
@@ -47,4 +47,4 @@ class ChartComponent extends React.Component {
   }
 }
 
-export default ChartComponent;
+export default Chart;
