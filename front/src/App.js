@@ -14,31 +14,22 @@ import BoursseFront from './BoursseFront';
 
 const themeLight = createMuiTheme({
   palette: {
-    background: {
-      default: '#e4f0e2',
-    },
+    type: 'light',
   },
 });
 
 const themeDark = createMuiTheme({
   palette: {
-    background: {
-      default: '#222222',
-    },
-    text: {
-      primary: '#ffffff',
-    },
+    type: 'dark',
   },
 });
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(0),
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
-    backgroundColor: theme.palette.grey[700],
-    color: theme.palette.primary.contrastText,
   },
   fixedHeight: {
     height: 400,
@@ -87,7 +78,7 @@ function App() {
             />
           </Grid>
           <Grid item xs>
-            <Paper className={fixedHeightPaper} elevation={4}>
+            <Paper className={fixedHeightPaper} elevation={4} theme={light ? themeLight : themeDark}>
               <List>
                 <ListItem>
                   <CheckboxFront Status={state.Boll} Func={handleChange} Name="Boll" Label="bollinger" />
@@ -102,7 +93,7 @@ function App() {
             </Paper>
           </Grid>
           <Grid item xs>
-            <Paper className={fixedHeightPaper} elevation={4}>
+            <Paper className={fixedHeightPaper} elevation={4} theme={light ? themeLight : themeDark}>
               <List>
                 <BoursseFront Selected={selectedIndex === 0} Handle={() => handleListItemClick(0, 'GOOGL')} Label="Google" DAY={setdaytime} />
                 <BoursseFront Selected={selectedIndex === 1} Handle={() => handleListItemClick(1, 'SBUX')} Label="Starbux" DAY={setdaytime} />
