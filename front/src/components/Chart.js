@@ -35,7 +35,7 @@ class Chart extends React.Component {
           <CandleChart
             type={type}
             data={this.state.data}
-            Boll={this.props.bolinger}
+            Boll={this.props.bollinger}
             EMA_20={this.props.ema_20}
             SMA_20={this.props.sma_20}
             EMA_50={this.props.ema_50}

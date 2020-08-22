@@ -9,14 +9,15 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Checkbox from './components/Checkbox';
 import ChartComponent from './components/Chart';
 import StockExchange from './components/StockExchange';
+import AppBar from './components/AppBar';
 
-const themeLight = createMuiTheme({
+const Light = createMuiTheme({
   palette: {
     type: 'light',
   },
 });
 
-const themeDark = createMuiTheme({
+const Dark = createMuiTheme({
   palette: {
     type: 'dark',
   },
@@ -35,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const [isLightTheme, setIsLightTheme] = useState(false);
+  const [isLightTheme, setIsLightTheme] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scope, setScope] = useState('1d');
-  const [trade, setTrade] = useState('');
+  const [trade, setTrade] = useState('GOOGL');
   const [state, setState] = useState({
     boll: false,
     volume: false,
@@ -47,7 +48,7 @@ function App() {
     ema_50: false,
   });
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const fixedHeight = clsx(classes.paper, classes.fixedHeight);
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -66,11 +67,11 @@ function App() {
     { index: 'FB', label: 'Facebook' },
     { index: 'GOLD', label: 'Or' },
   ];
-
   return (
     <div>
-      <MuiThemeProvider theme={isLightTheme ? themeLight : themeDark}>
+      <MuiThemeProvider theme={isLightTheme ? Light : Dark}>
         <CssBaseline />
+        <AppBar setMode={() => { setIsLightTheme(!isLightTheme); }} />
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <ChartComponent
@@ -84,7 +85,7 @@ function App() {
             />
           </Grid>
           <Grid item xs>
-            <Paper className={fixedHeightPaper} elevation={4} theme={light ? themeLight : themeDark}>
+            <Paper className={fixedHeight} elevation={4} theme={isLightTheme ? Light : Dark}>
               <List>
                 <ListItem>
                   <Checkbox status={state.boll} effect={handleChange} name="boll" label="Bollinger" />
@@ -99,7 +100,7 @@ function App() {
             </Paper>
           </Grid>
           <Grid item xs>
-            <Paper className={fixedHeightPaper} elevation={4} theme={light ? themeLight : themeDark}>
+            <Paper className={fixedHeight} elevation={4} theme={isLightTheme ? Light : Dark}>
               <List>
                 {
                   stockData.map((stock, index) => (

@@ -16,9 +16,9 @@ function parseData(parse) {
     d.low = +d.Low;
     d.close = +d.Close;
     d.volume = +d.Volume;
-    if (d.volume === 0) {
-      console.log(d);
-    }
+    // if (d.volume === 0) {
+    //   console.log(d);
+    // }
     return d;
   };
 }
