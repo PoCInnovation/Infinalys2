@@ -1,12 +1,7 @@
-import { BollingerBandTooltip } from 'react-stockcharts/lib/tooltip';
 import React from 'react';
-import {
-  BollingerSeries,
-} from 'react-stockcharts/lib/series';
-
-import {
-  bollingerBand,
-} from 'react-stockcharts/lib/indicator';
+import { BollingerBandTooltip } from 'react-stockcharts/lib/tooltip';
+import { BollingerSeries } from 'react-stockcharts/lib/series';
+import { bollingerBand } from 'react-stockcharts/lib/indicator';
 
 const bbStroke = {
   top: '#964B00',

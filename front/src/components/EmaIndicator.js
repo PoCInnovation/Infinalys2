@@ -1,14 +1,8 @@
 import React from 'react';
-
 import { MovingAverageTooltip } from 'react-stockcharts/lib/tooltip';
 import { CurrentCoordinate } from 'react-stockcharts/lib/coordinates';
-import {
-  LineSeries,
-} from 'react-stockcharts/lib/series';
-
-import {
-  ema, sma,
-} from 'react-stockcharts/lib/indicator';
+import { LineSeries } from 'react-stockcharts/lib/series';
+import { ema, sma } from 'react-stockcharts/lib/indicator';
 
 export function Ema20(Data, BoolEma) {
   const ema20 = ema()

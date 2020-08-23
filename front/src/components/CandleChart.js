@@ -6,19 +6,13 @@ import { ChartCanvas, Chart } from 'react-stockcharts';
 import { XAxis, YAxis } from 'react-stockcharts/lib/axes';
 import { MouseCoordinateX, MouseCoordinateY } from 'react-stockcharts/lib/coordinates';
 import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale';
-import {
-  OHLCTooltip,
-} from 'react-stockcharts/lib/tooltip';
+import { OHLCTooltip } from 'react-stockcharts/lib/tooltip';
 import { fitWidth } from 'react-stockcharts/lib/helper';
 import { last } from 'react-stockcharts/lib/utils';
-import {
-  CandlestickSeries,
-} from 'react-stockcharts/lib/series';
+import { CandlestickSeries } from 'react-stockcharts/lib/series';
 import CrossHairCursor from 'react-stockcharts/lib/coordinates/CrossHairCursor';
 import bollinger from './BollingerIndicator';
-import {
-  Ema20, Ema50, Sma20,
-} from './EmaIndicator';
+import { Ema20, Ema50, Sma20 } from './EmaIndicator';
 import Volume from './VolumeChart';
 import Macd from './MacdIndicator';
 
@@ -65,8 +59,7 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
     } = this.props;
 
     const calculatedData = initialData;
-    const xScaleProvider = discontinuousTimeScaleProvider
-      .inputDateAccessor((d) => d.date);
+    const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor((d) => d.date);
     const {
       data, xScale, xAccessor, displayXAccessor,
     } = xScaleProvider(calculatedData);
