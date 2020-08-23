@@ -3,14 +3,23 @@ import { timeParse } from 'd3-time-format';
 
 const parseDate = timeParse('%Y-%m-%d');
 
-function parseData(d) {
-  return {
-    date: parseDate(d.Date),
-    open: d.Open,
-    high: d.High,
-    low: d.Low,
-    close: d.Close,
-    volume: d.Volume,
+function parseData(parse) {
+  return function (d) {
+    d.date = parseDate(d.Date);
+    // var curentday = new Date()
+    // if (curentday < d.date) {
+    // 	console.log(curentday)
+    // 	console.log(d.date)
+    // }
+    d.open = +d.Open;
+    d.high = +d.High;
+    d.low = +d.Low;
+    d.close = +d.Close;
+    d.volume = +d.Volume;
+    // if (d.volume === 0) {
+    //   console.log(d);
+    // }
+    return d;
   };
 }
 
@@ -20,6 +29,6 @@ function parseData(d) {
 export default function getData(trade, day) {
   const promiseMSFT = fetch(`http://0.0.0.0:5000/?stock=${trade}&interval=${day}`)
     .then((response) => response.text())
-    .then((data) => tsvParse(data, parseData()));
+    .then((data) => tsvParse(data, parseData(parseDate)));
   return promiseMSFT;
 }

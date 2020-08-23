@@ -55,18 +55,18 @@ export default function MacdIndicator(data, BollMacd, id, length) {
           orient="bottom"
           displayFormat={timeFormat('%Y-%m-%d')}
           rectRadius={5}
-          style={mouseEdgeAppearance}
+          appearance={mouseEdgeAppearance}
         />
         <MouseCoordinateY
           at="right"
           orient="right"
           displayFormat={format('.2f')}
-          style={mouseEdgeAppearance}
+          appearance={mouseEdgeAppearance}
         />
 
         <MACDSeries
           yAccessor={(d) => d.macd}
-          style={macdAppearance}
+          appearance={macdAppearance}
         />
         <MACDTooltip
           origin={[-38, 15]}
