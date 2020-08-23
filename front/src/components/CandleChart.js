@@ -15,6 +15,7 @@ import bollinger from './BollingerIndicator';
 import { Ema20, Ema50, Sma20 } from './EmaIndicator';
 import Volume from './VolumeChart';
 import Macd from './MacdIndicator';
+import Rsi from './RsiIndicator';
 
 function loadDataVolume(data) {
   let tab = [];
@@ -55,7 +56,7 @@ function SetupMaxId(tab) {
 class CandleStickChartWithBollingerBandOverlay extends React.Component {
   render() {
     const {
-      type, data: initialData, width, ratio, Boll, EMA_20, EMA_50, SMA_20, VOLUME, MACD,
+      type, data: initialData, width, ratio, Boll, EMA_20, EMA_50, SMA_20, VOLUME, MACD, RSI,
     } = this.props;
 
     const calculatedData = initialData;
@@ -67,7 +68,7 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
     const start = xAccessor(last(data));
     const end = xAccessor(data[Math.max(0, data.length - 150)]);
     const xExtents = [start, end];
-    let maxid = SetupMaxId([true, VOLUME, MACD]);
+    let maxid = SetupMaxId([true, VOLUME, MACD, RSI]);
     let length = SetupLengt(maxid);
 
     function ReturnId(boolean) {
@@ -155,6 +156,7 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
         </Chart>
         {Volume(VOLUME, ReturnId(VOLUME), GradualLength(VOLUME))}
         {Macd(initialData, MACD, ReturnId(MACD), GradualLength(MACD))}
+        {Rsi(initialData, RSI, ReturnId(RSI), GradualLength(RSI))}
         <CrossHairCursor />
       </ChartCanvas>
     );

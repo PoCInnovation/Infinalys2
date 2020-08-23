@@ -17,7 +17,7 @@ export default function Volume(BoolVolume, id, length) {
       >
         <XAxis axisAt="bottom" orient="bottom" />
         <YAxis axisAt="left" orient="left" ticks={5} tickFormat={format('.2s')} />
-        <BarSeries yAccessor={(d) => d.volume} />
+        <BarSeries yAccessor={(d) => d.volume} fill={(d) => (d.close > d.open ? '#6BA583' : 'red')} />
         <MouseCoordinateX
           at="bottom"
           orient="bottom"

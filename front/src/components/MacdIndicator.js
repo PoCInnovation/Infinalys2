@@ -44,7 +44,7 @@ export default function MacdIndicator(data, BollMacd, id, length) {
         id={id}
         height={200}
         yExtents={macdCalculator.accessor()}
-        origin={(w, h) => [0, h - (200 - length)]}
+        origin={(w, h) => [0, h - (200 + length)]}
         padding={{ top: 10, bottom: 10 }}
       >
         <XAxis axisAt="bottom" orient="bottom" />
@@ -55,18 +55,18 @@ export default function MacdIndicator(data, BollMacd, id, length) {
           orient="bottom"
           displayFormat={timeFormat('%Y-%m-%d')}
           rectRadius={5}
-          appearance={mouseEdgeAppearance}
+          {...mouseEdgeAppearance}
         />
         <MouseCoordinateY
           at="right"
           orient="right"
           displayFormat={format('.2f')}
-          appearance={mouseEdgeAppearance}
+          {...mouseEdgeAppearance}
         />
 
         <MACDSeries
           yAccessor={(d) => d.macd}
-          appearance={macdAppearance}
+          {...macdAppearance}
         />
         <MACDTooltip
           origin={[-38, 15]}

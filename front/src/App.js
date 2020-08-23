@@ -47,6 +47,7 @@ function App() {
     sma_20: false,
     ema_50: false,
     Macd: false,
+    Rsi: false,
   });
   const classes = useStyles();
   const fixedHeight = clsx(classes.paper, classes.fixedHeight);
@@ -82,6 +83,7 @@ function App() {
               ema_50={state.ema_50}
               sma_20={state.sma_20}
               macd={state.Macd}
+              rsi={state.Rsi}
               trade={trade}
               day={scope}
             />
@@ -98,6 +100,7 @@ function App() {
                   <Checkbox status={state.ema_20} effect={handleChange} name="ema_20" label="ema20" />
                   <Checkbox status={state.ema_50} effect={handleChange} name="ema_50" label="ema50" />
                   <Checkbox status={state.Macd} effect={handleChange} name="Macd" label="MACD" />
+                  <Checkbox status={state.Rsi} effect={handleChange} name="Rsi" label="RSI" />
                 </ListItem>
               </List>
             </Paper>
