@@ -4,12 +4,8 @@ import { timeFormat } from 'd3-time-format';
 import { Chart } from 'react-stockcharts';
 import { XAxis, YAxis } from 'react-stockcharts/lib/axes';
 import { MouseCoordinateX, MouseCoordinateY } from 'react-stockcharts/lib/coordinates';
-import {
-  MACDTooltip,
-} from 'react-stockcharts/lib/tooltip';
-import {
-  MACDSeries,
-} from 'react-stockcharts/lib/series';
+import { MACDTooltip } from 'react-stockcharts/lib/tooltip';
+import { MACDSeries } from 'react-stockcharts/lib/series';
 import { macd } from 'react-stockcharts/lib/indicator';
 
 const macdAppearance = {
@@ -59,18 +55,18 @@ export default function MacdIndicator(data, BollMacd, id, length) {
           orient="bottom"
           displayFormat={timeFormat('%Y-%m-%d')}
           rectRadius={5}
-          {...mouseEdgeAppearance}
+          style={mouseEdgeAppearance}
         />
         <MouseCoordinateY
           at="right"
           orient="right"
           displayFormat={format('.2f')}
-          {...mouseEdgeAppearance}
+          style={mouseEdgeAppearance}
         />
 
         <MACDSeries
           yAccessor={(d) => d.macd}
-          {...macdAppearance}
+          style={macdAppearance}
         />
         <MACDTooltip
           origin={[-38, 15]}
