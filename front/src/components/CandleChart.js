@@ -6,17 +6,21 @@ import { ChartCanvas, Chart } from 'react-stockcharts';
 import { XAxis, YAxis } from 'react-stockcharts/lib/axes';
 import { MouseCoordinateX, MouseCoordinateY } from 'react-stockcharts/lib/coordinates';
 import { discontinuousTimeScaleProvider } from 'react-stockcharts/lib/scale';
-import { OHLCTooltip } from 'react-stockcharts/lib/tooltip';
+import {
+  OHLCTooltip,
+} from 'react-stockcharts/lib/tooltip';
 import { fitWidth } from 'react-stockcharts/lib/helper';
 import { last } from 'react-stockcharts/lib/utils';
 import {
   CandlestickSeries,
 } from 'react-stockcharts/lib/series';
+import CrossHairCursor from 'react-stockcharts/lib/coordinates/CrossHairCursor';
 import bollinger from './BollingerIndicator';
 import {
   Ema20, Ema50, Sma20,
 } from './EmaIndicator';
 import Volume from './VolumeChart';
+import Macd from './MacdIndicator';
 
 function loadDataVolume(data) {
   let tab = [];
@@ -42,20 +46,22 @@ function SetupLengt(value) {
 }
 
 function SetupMaxId(tab) {
-  let value = 1;
+  let value = 0;
 
   for (let index = 0; index < tab.length; index += 1) {
     if (tab[index]) {
       value += 1;
     }
   }
+  // console.log('MAXID');
+  // console.log(value);
   return value;
 }
 
 class CandleStickChartWithBollingerBandOverlay extends React.Component {
   render() {
     const {
-      type, data: initialData, width, ratio, Boll, EMA_20, EMA_50, SMA_20, VOLUME,
+      type, data: initialData, width, ratio, Boll, EMA_20, EMA_50, SMA_20, VOLUME, MACD,
     } = this.props;
 
     const calculatedData = initialData;
@@ -68,8 +74,32 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
     const start = xAccessor(last(data));
     const end = xAccessor(data[Math.max(0, data.length - 150)]);
     const xExtents = [start, end];
-    const maxid = SetupMaxId([VOLUME]);
-    const length = SetupLengt(maxid);
+    let maxid = SetupMaxId([true, VOLUME, MACD]);
+    let length = SetupLengt(maxid);
+
+    function ReturnId(boolean) {
+      if (boolean) {
+        const value = maxid;
+        maxid -= 1;
+        // console.log('return ID');
+        // console.log(value);
+        return value;
+      }
+    }
+
+    function GradualLength(bolean) {
+      if (bolean) {
+        // console.log('before');
+        // console.log(length);
+        length -= 200;
+        const value = length;
+        // console.log('after');
+        // console.log(length);
+        // console.log('value');
+        // console.log(value);
+        return value;
+      }
+    }
 
     return (
       <ChartCanvas
@@ -88,7 +118,7 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
         xExtents={xExtents}
       >
         <Chart
-          id={1}
+          id={ReturnId(true)}
           height={300}
           yExtents={[(d) => [d.high, d.low]]}
         >
@@ -130,7 +160,9 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
           {Sma20(initialData, SMA_20)}
           {bollinger(initialData, Boll)}
         </Chart>
-        {Volume(VOLUME, 2)}
+        {Volume(VOLUME, ReturnId(VOLUME), GradualLength(VOLUME))}
+        {Macd(initialData, MACD, ReturnId(MACD), GradualLength(MACD))}
+        <CrossHairCursor />
       </ChartCanvas>
     );
   }

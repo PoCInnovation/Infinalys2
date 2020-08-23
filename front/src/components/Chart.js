@@ -40,6 +40,7 @@ class Chart extends React.Component {
             SMA_20={this.props.sma_20}
             EMA_50={this.props.ema_50}
             VOLUME={this.props.volume}
+            MACD={this.props.macd}
           />
         )}
       </TypeChooser>
