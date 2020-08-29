@@ -17,7 +17,7 @@ sys.path.insert(1, '../ai')
 from main import generate_model_on_stock
 from predict import predict_one_interval
 from list_to_tsv import list_to_tsv
-from data_utils import normalize_data
+from data_utils import normalize_data, delete_nans_in_data
 
 app = Flask(__name__)
 
@@ -55,23 +55,23 @@ def prediction_ia(stock_symbol, interval, model_path):
     stocks_data = generate_model_on_stock(stock_symbol, interval)
     scaler = load(f'{model_path}/std_scaler.bin')
     model = tensorflow.keras.models.load_model(model_path)
+    new_scaler = StandardScaler()
 
-    prediction = predict_one_interval(
-        model,
-        numpy.array(prepare_prediction(stocks_data)),
-        scaler
-    )
+    stocks = delete_nans_in_data(stocks_data)
+    stocks = numpy.delete(stocks, 3, 1)
+    stocks = new_scaler.fit_transform(stocks)
+    stock = stocks[len(stocks) - 1]
+
+    prediction = predict_one_interval(model, stock, scaler)
     return (prediction)
 
 def get_info(stock_symbol, interval):
     model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
 
-    prediction = prediction_ia(stock_symbol, interval, model_path)
+    predict = prediction_ia(stock_symbol, interval, model_path)
+    predict = [0, predict[0][1], predict[0][1], predict[0][2], predict[0][3], predict[0][4]]
 
-    prediction_list = [0, 0, 0, 0, 0, 0]
-    prediction_list[4] = prediction[0]
-
-    list_to_tsv(stock_symbol, interval, prediction_list)
+    list_to_tsv(stock_symbol, interval, predict)
 
 @app.route("/", methods=["GET", "POST"])
 def backend():

@@ -25,7 +25,7 @@ def create_model(model_path):
     model.add(tensorflow.keras.layers.Dense(256))
     model.add(tensorflow.keras.layers.Dense(128))
     model.add(tensorflow.keras.layers.Dense(64))
-    model.add(tensorflow.keras.layers.Dense(1))
+    model.add(tensorflow.keras.layers.Dense(5))
 
     model.compile(
         loss="mean_squared_error",
@@ -40,7 +40,7 @@ def create_model(model_path):
 
     return (model, checkpoint_callback)
 
-def print_predict(predict, real, x_test, interval):
+def print_predict(predict, real, interval):
     """printing predict"""
     matplotlib.pyplot.plot(predict, 'r')
     matplotlib.pyplot.plot(real, 'b')
@@ -52,20 +52,21 @@ def print_predict(predict, real, x_test, interval):
 def test_model(model, x_test, y_test, scaler, interval):
     predicted_data = model.predict(x_test)
     predicted_data, real_data = denormalize_data(predicted_data, y_test, scaler)
-    x_test = denormalize_data(x_test, x_test, scaler)
-    print_predict(predicted_data, real_data, x_test, interval)
+    print_predict(predicted_data, real_data, interval)
 
 def predict_one_interval(model, open_data, scaler):
-    open_data = numpy.reshape(open_data, newshape=(1, NB_INDICATORS - 1))
+    open_data = numpy.reshape(open_data, (-1, NB_INDICATORS - 1))
+
     close_data = model.predict(open_data)
-    (close_data, close_data) = denormalize_data(close_data, close_data, scaler)
-    return numpy.array(close_data)
+    close_data = scaler.inverse_transform(close_data)
+    return close_data
 
 def predict_on_stocks(array: numpy.array, model_path: str, interval: str):
     scaler = StandardScaler()
     open_data, close_data = init_data(array)
 
-    open_data, close_data = normalize_data(open_data, close_data, scaler, NB_INDICATORS)
+    open_data, close_data = normalize_data(open_data, close_data, scaler)
+
     (x_train, y_train, x_test, y_test) = split_data(open_data, close_data)
     (x_train, y_train) = shuffle_data(x_train, y_train)
 
@@ -76,5 +77,6 @@ def predict_on_stocks(array: numpy.array, model_path: str, interval: str):
     )
 
     #test_model(model, x_test, y_test, scaler, interval)
+    #predict_one_interval(model, x_test[len(x_test) - 1], scaler)
 
     dump(scaler, f'{model_path}/std_scaler.bin', compress=True)
