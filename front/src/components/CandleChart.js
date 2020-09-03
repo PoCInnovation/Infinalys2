@@ -19,9 +19,10 @@ import Rsi from './RsiIndicator';
 
 function loadDataVolume(data) {
   let tab = [];
+  const newDate = new Date();
 
   for (let index = 0; index < data.length; index += 1) {
-    if (data[index].volume === 0) {
+    if (data[index].date > newDate) {
       const element = data[index];
       tab = tab.concat(element);
     }

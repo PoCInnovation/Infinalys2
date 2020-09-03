@@ -40,6 +40,7 @@ function App() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scope, setScope] = useState('1d');
   const [trade, setTrade] = useState('GOOGL');
+  const [day, setday] = React.useState('1');
   const [state, setState] = useState({
     boll: false,
     volume: false,
@@ -73,7 +74,7 @@ function App() {
     <div>
       <MuiThemeProvider theme={isLightTheme ? Light : Dark}>
         <CssBaseline />
-        <AppBar setMode={() => { setIsLightTheme(!isLightTheme); }} />
+        <AppBar setMode={() => { setIsLightTheme(!isLightTheme); }} setday={setday} day={day} />
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <ChartComponent
