@@ -1,26 +1,18 @@
 # Infinalys2
 
-Infinalys2 is the successor of the Infinalys project which was an artificial intelligence to make prediction of the trading market and currently on the project you have the recovery of trading information.
+Infinalys2 is the successor of the [Infinalys project](https://github.com/PoCFrance/Infinalys) which was an IA model to predict the evolution of stock markets.
 
 ![](without_indicator.png)
 
-## Getting Started
+## Installation
 
-### Prerequisites
-
-## you must install python modules before going on
-
-```
-pip install yfinance --user
-pip install pandas --user
-pip install stockstats --user
-pip install tensorflow --user
-pip install matplotlib --user
+### In the `predictor` folder, install the python modules:
+```bash
+pip install --user yfinance pandas stockstats tensorflow matplotlib
 ```
 
-## and in order to make the frontend works you must
-
-```
+### In the `front` folder, install the node modules:
+```bash
 cd front
 npm install
 npm start
@@ -28,50 +20,44 @@ npm start
 
 ## Overview
 
-Move into src Folder and run main.py
-
+In the `src` folder, run `main.py`:
+```bash
+./main.py <stock> <interval>
+# or
+python3 main.py <stock> <interval>
 ```
-./main.py (stock) (interval)
-OR
-python3 main.py (stock) (interval)
-```
 
-### USAGE
+**stock**: stock symbol to be downloaded  
+**interval**: interval of the stock to be downloaded (1d, 5d, 1wk, 1mo, 3mo)
 
-stock: stock symbol to be downloaded
-interval: interval of the stock to be downloaded (1d, 5d, 1wk, 1mo, 3mo)
-
-##### EXAMPLES
-
+### Examples
 ```
 ./main.py APPL 1d
 ./main.py OIL 5d
-./main.py
 ./main.py AMZN 1mo
 ```
 
 ### Customisation
 
-In the folder assets in irma folder you can see 2 file
+In the `companies.csv` you got a list of the Best 506 companies in the trading market.  
+You can copy in this file somme companies and put them into the file `companies_test` to evaluate them.  
+The result of the fetch of `companies_test` is put into the `stock` file
 
-In the companies.csv you got a list of the Best 506 companies in the trading market.
-
-And you can copy in this file somme companies and put them into the file companies_test to evaluate them
-
-the result of the fetch of companies_test is put into the ```stock``` file
-
-## Back_end
-
-The back_end is done with flask we get request to be able transmit the purse and the candle time.
-
-## exemple
+### Demonstration
 
 ![](all_indicator.png)
 ![](boolinger_mult.png)
 
-## Built With
+## Built with
 
 * [yahoo-finance-api](https://github.com/topics/yahoo-finance-api) - Fetch framework used
 * [stock-stats](https://github.com/jealous/stockstats) - Stocks indicators calculator
 * [stockCharts](https://github.com/rrag/react-stockcharts) - chart lib in react
 * [materialUI](https://material-ui.com/) - graphical framework in react
+
+
+## Authors
+
+ - [Alexandre Chétrit](https://github.com/chetrit)
+ - [Coline Seguret](https://github.com/Cleopha)
+ - [Grégoire Brasseur](https://github.com/lerimeur)
