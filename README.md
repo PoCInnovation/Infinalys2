@@ -2,7 +2,7 @@
 
 Infinalys2 is the successor of the [Infinalys project](https://github.com/PoCFrance/Infinalys) which was an IA model to predict the evolution of stock markets.
 
-![](without_indicator.png)
+![](.github/without_indicator.png)
 
 ## Installation
 
@@ -45,8 +45,8 @@ The result of the fetch of `companies_test` is put into the `stock` file
 
 ### Demonstration
 
-![](all_indicator.png)
-![](boolinger_mult.png)
+![](.github/all_indicator.png)
+![](.github/boolinger_mult.png)
 
 ## Built with
 
