@@ -6,8 +6,6 @@ import sys
 import json
 import pandas
 
-from pprint import pprint
-
 from fetch import download_stocks
 from manage_stocks import manage_stocks
 from predict import predict_on_stocks
@@ -35,7 +33,7 @@ def generate_model_on_stock(stock_symbol: str, interval: str):
 
     model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
     if os.path.isdir(model_path) is False:
-        predict_on_stocks(stock_data, model_path, interval)
+        predict_on_stocks(stock_data, model_path, interval, stock_path)
     return (stock_data)
 
 def main():

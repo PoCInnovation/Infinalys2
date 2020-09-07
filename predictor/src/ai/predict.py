@@ -10,12 +10,16 @@ import datetime
 import numpy
 import pandas
 import math
+# Csv file manipulatons
+import csv
 
 from sklearn.preprocessing import StandardScaler
 from joblib import dump
 from sklearn.model_selection import train_test_split
-
-from data_utils import *
+from data_utils import normalize_data, denormalize_data, init_data, split_data, shuffle_data
+from datetime import date
+from manage_stocks import add_indicator, add_indicators_to_predict
+from stockstats import StockDataFrame
 
 EPOCHS = 20
 NB_INDICATORS = 15
@@ -25,7 +29,7 @@ def create_model(model_path):
     model.add(tensorflow.keras.layers.Dense(256))
     model.add(tensorflow.keras.layers.Dense(128))
     model.add(tensorflow.keras.layers.Dense(64))
-    model.add(tensorflow.keras.layers.Dense(5))
+    model.add(tensorflow.keras.layers.Dense(6))
 
     model.compile(
         loss="mean_squared_error",
@@ -55,13 +59,48 @@ def test_model(model, x_test, y_test, scaler, interval):
     print_predict(predicted_data, real_data, interval)
 
 def predict_one_interval(model, open_data, scaler):
-    open_data = numpy.reshape(open_data, (-1, NB_INDICATORS - 1))
+    open_data = numpy.reshape(open_data, (-1, NB_INDICATORS))
 
     close_data = model.predict(open_data)
     close_data = scaler.inverse_transform(close_data)
     return close_data
 
-def predict_on_stocks(array: numpy.array, model_path: str, interval: str):
+def write_predict(stock_path, close_data):
+    write_predict.nb_calls += 1
+
+    with open(stock_path, 'a+') as file:
+        writer = csv.DictWriter(file, fieldnames=['Date', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'])
+        data_to_write = {
+            'Date' : (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls)).strftime("%Y-%m-%d"),
+            'Open' : close_data[0],
+            'High' : close_data[1],
+            'Low' : close_data[2],
+            'Close' : close_data[3],
+            'Adj Close' : close_data[4],
+            'Volume' : close_data[5]
+        }
+        writer.writerow(data_to_write)
+write_predict.nb_calls = 0
+
+def predict_multiple_intervals(model, open_data, scaler, stock_path, nb_intervals):
+    if nb_intervals is 0:
+        return numpy.empty((0, NB_INDICATORS))
+
+    open_data = numpy.reshape(open_data, (-1, NB_INDICATORS))
+
+    close_data = model.predict(open_data)
+    data_to_write = scaler.inverse_transform(close_data)
+    data_to_write = numpy.ndarray.flatten(data_to_write)
+
+    write_predict(stock_path, data_to_write)
+    close_data = add_indicators_to_predict(stock_path)
+
+    return numpy.vstack(
+        (close_data,
+        predict_multiple_intervals(model, close_data, scaler, stock_path, nb_intervals - 1))
+    )
+
+def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_path: str):
     scaler = StandardScaler()
     open_data, close_data = init_data(array)
 
@@ -77,6 +116,6 @@ def predict_on_stocks(array: numpy.array, model_path: str, interval: str):
     )
 
     #test_model(model, x_test, y_test, scaler, interval)
-    #predict_one_interval(model, x_test[len(x_test) - 1], scaler)
+    #toto = predict_multiple_intervals(model, x_test[len(x_test) - 1], scaler, stock_path, 1)
 
     dump(scaler, f'{model_path}/std_scaler.bin', compress=True)

@@ -2,9 +2,6 @@
 import numpy
 import math
 
-#import sys
-#numpy.set_printoptions(threshold=sys.maxsize)
-
 # Tensorflow
 import tensorflow
 
@@ -23,8 +20,7 @@ def delete_nans_in_data(array):
 
 def init_data(array):
     open_data = delete_nans_in_data(array)
-    open_data = numpy.delete(open_data, 3, 1)
-    close_data = open_data[:, [0, 1, 2, 3, 4]]
+    close_data = open_data[:, [0, 1, 2, 3, 4, 5]]
     close_data = numpy.delete(close_data, 0, 0)
     open_data = numpy.delete(open_data, len(open_data) - 1, 0)
     return (open_data, close_data)

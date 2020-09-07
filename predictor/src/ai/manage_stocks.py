@@ -25,3 +25,12 @@ def manage_stocks(stock_path: str):
     for i in range(len(INDICATORS)):
         array = add_indicator(array, stock_stats[INDICATORS[i]].to_numpy())
     return array
+
+def add_indicators_to_predict(stock_path: str):
+    stock = pandas.read_csv(stock_path)
+    stock_stats = StockDataFrame.retype(stock)
+    array = numpy.array(stock)
+    for i in range(len(INDICATORS)):
+        array.resize((array.shape[0], array.shape[1] + 1))
+        array[len(array) - 1][array.shape[1] - 1] = stock_stats[INDICATORS[i]][len(stock_stats) - 1]
+    return array[len(array) - 1]

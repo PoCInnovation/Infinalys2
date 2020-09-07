@@ -5,7 +5,6 @@ WORKDIR /app
 COPY saves /app/saves
 COPY src /app/src
 COPY assets /app/assets
-RUN ls -l /app/
 EXPOSE 5000
 WORKDIR /app/src/backend/
 ENTRYPOINT [ "gunicorn","--bind","0.0.0.0:5000","wsgi:app" ]
