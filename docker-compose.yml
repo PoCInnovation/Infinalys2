@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+    back:
+        container_name: back_infinalys2
+        build:
+            context: ./predictor
+            dockerfile: Dockerfile
+        ports:
+            - 5000:5000
+
+    front:
+        container_name: front_infinalys2
+        build:
+            context: ./front
+            dockerfile: Dockerfile
+        volumes:
+            - '.:/app'
+        ports:
+            - 3000:3000
+        environment:
+            - CHOKIDAR_USEPOLLING=true
