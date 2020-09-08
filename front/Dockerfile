@@ -1,11 +1,15 @@
 FROM node:13.12.0-alpine
+
 WORKDIR /app
+
 ENV PATH /app/node_modules/.bin:$PATH
-COPY node_modules ./
-COPY package.json ./
-COPY package-lock.json ./
-COPY public ./
-COPY src ./
-RUN npm install
-COPY . ./
-CMD ["npm", "start"]
+
+COPY package.json package-lock.json ./
+
+COPY public  /app/public
+
+COPY src /app/src
+
+RUN npm install && npm install -g serve && npm run build
+
+CMD ["serve", "-l", "3000", "-s", "build"]

@@ -8,7 +8,7 @@ import SimpleSelect from './OcurenceSelector';
 export default function ButtonAppBar({
   setMode, setday, day,
 }) {
-  console.log(setMode);
+  // console.log(setMode);
   return (
     <div>
       <AppBar position="static" color="primary">
