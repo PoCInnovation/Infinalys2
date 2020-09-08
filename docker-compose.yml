@@ -18,5 +18,7 @@ services:
             - '.:/app'
         ports:
             - 3000:3000
+        command: ["npm", "run", $START_ENVIRONMENT]
+        stdin_open: true
         environment:
             - CHOKIDAR_USEPOLLING=true
