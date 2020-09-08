@@ -6,7 +6,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 COPY package.json package-lock.json ./
 
-COPY public  /app/public
+COPY public /app/public
 
 COPY src /app/src
 
