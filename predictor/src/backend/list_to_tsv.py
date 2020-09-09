@@ -12,7 +12,8 @@ OPEN = 1
 HIGH = 2
 LOW = 3
 CLOSE = 4
-VOLUME = 5
+ADJ_CLOSE = 5
+VOLUME = 6
 
 def csv_to_list(csvin):
     string = csvin.read() + '\n'
@@ -28,24 +29,17 @@ def csv_to_list(csvin):
                 string[line][i] = 'NULL'
     return(string)
 
-def list_to_tsv(stock_symbol: str, interval: str, predict: list):
+def list_to_tsv(stock_symbol: str, interval: str):
     stocks_path = f'{STOCKS_PATH}/{stock_symbol}_{interval}.csv'
     tsv_path = f'{TSV_PATH}/{stock_symbol}_{interval}.tsv'
+
     with open (stocks_path, 'r', newline='') as csvin, open(tsv_path, 'w') as tsvout:
-        csv_read = csv.reader(csvin) ##unused variable
         tsv_write = csv.writer(tsvout, delimiter='\t')
-
         string = csv_to_list(csvin)
-
-        predict[DATE] = date.today() + timedelta(days=1)
         for row in string:
             if row[DATE] == 'NULL' or row[OPEN] == 'NULL':
                 continue
-            last_row = row
             tsv_write.writerow(row)
-
-        predict[OPEN] = last_row[CLOSE]
-        tsv_write.writerow(predict)
         csvin.close()
         tsvout.close()
     return (0)

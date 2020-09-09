@@ -69,6 +69,8 @@ function App() {
     { index: '^FCHI', label: 'CAC 40' },
     { index: 'FB', label: 'Facebook' },
     { index: 'GOLD', label: 'Or' },
+    { index: 'BTC-USD', label: 'Bitcoin' },
+    { index: '^IXIC', label: 'NASDAQ'}
   ];
   return (
     <div>

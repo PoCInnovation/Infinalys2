@@ -58,6 +58,6 @@ The result of the fetch of `companies_test` is put into the `stock` file
 
 ## Authors
 
- - [Alexandre Chétrit](https://github.com/chetrit)
+ - [Alexandre Chetrit](https://github.com/chetrit)
  - [Coline Seguret](https://github.com/Cleopha)
  - [Grégoire Brasseur](https://github.com/lerimeur)
