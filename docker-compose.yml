@@ -15,6 +15,7 @@ services:
         build:
             context: ./front
             dockerfile: Dockerfile
+        stdin_open: true
         ports:
             - 3000:3000
         networks:

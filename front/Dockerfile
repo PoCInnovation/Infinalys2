@@ -6,12 +6,10 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 COPY package.json package-lock.json ./
 
-RUN npm install && npm install -g serve
+RUN npm install
 
 COPY public /app/public
 
 COPY src /app/src
 
-RUN npm run build
-
-CMD ["serve", "-l", "3000", "-s", "build"]
+CMD ["npm", "start"]
