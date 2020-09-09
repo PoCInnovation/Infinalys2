@@ -12,17 +12,42 @@ import pandas
 import math
 # Csv file manipulatons
 import csv
+#import time
 
 from sklearn.preprocessing import StandardScaler
 from joblib import dump
 from sklearn.model_selection import train_test_split
 from data_utils import normalize_data, denormalize_data, init_data, split_data, shuffle_data
-from datetime import date
+from datetime import date, time, timedelta
 from manage_stocks import add_indicator, add_indicators_to_predict
 from stockstats import StockDataFrame
 
 EPOCHS = 20
 NB_INDICATORS = 15
+TIME_BY_INTERVAL = numpy.array([
+        ('1m', timedelta(minutes=1)),
+        ('2m', timedelta(minutes=2)),
+        ('5m', timedelta(minutes=5)),
+        ('15m', timedelta(minutes=15)),
+        ('30m', timedelta(minutes=30)),
+        ('60m', timedelta(minutes=60)),
+        ('90m', timedelta(minutes=90)),
+        ('1h', timedelta(hours=1)),
+        ('1d', timedelta(days=1)),
+        ('5d', timedelta(days=5)),
+        ('1wk', timedelta(weeks=1)),
+        ('1mo', timedelta(weeks=4)),
+        ('3mo', timedelta(weeks=12))
+])
+
+def custom_loss_function(y_actual, y_predicted):
+    #print('y_actual:', y_actual)
+    #print('y_predicted', y_predicted)
+    #tensorflow.print('y_actual', y_actual)
+    #tensorflow.print('y_predicted', y_predicted)
+    #time.sleep(1)
+    custom_loss_value=tensorflow.keras.backend.mean(tensorflow.keras.backend.sum(tensorflow.keras.backend.square((y_actual - y_predicted)/10)))
+    return custom_loss_value
 
 def create_model(model_path):
     model = tensorflow.keras.models.Sequential()
@@ -32,7 +57,7 @@ def create_model(model_path):
     model.add(tensorflow.keras.layers.Dense(6))
 
     model.compile(
-        loss="mean_squared_error",
+        loss=custom_loss_function,
         optimizer=tensorflow.keras.optimizers.Adam(lr=1e-3, decay=1e-4),
     )
 
@@ -65,13 +90,19 @@ def predict_one_interval(model, open_data, scaler):
     close_data = scaler.inverse_transform(close_data)
     return close_data
 
-def write_predict(stock_path, close_data):
+def get_time_to_add(nb_calls, interval):
+    #TODO use magic array ""
+    return (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls))
+
+def write_predict(stock_path, close_data, interval, get_time_to_add):
     write_predict.nb_calls += 1
+
+    time_to_add = get_time_to_add(write_predict.nb_calls, interval)
 
     with open(stock_path, 'a+') as file:
         writer = csv.DictWriter(file, fieldnames=['Date', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'])
         data_to_write = {
-            'Date' : (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls)).strftime("%Y-%m-%d"),
+            'Date' : time_to_add.strftime("%Y-%m-%d"),
             'Open' : close_data[0],
             'High' : close_data[1],
             'Low' : close_data[2],
@@ -82,7 +113,7 @@ def write_predict(stock_path, close_data):
         writer.writerow(data_to_write)
 write_predict.nb_calls = 0
 
-def predict_multiple_intervals(model, open_data, scaler, stock_path, nb_intervals):
+def predict_multiple_intervals(model, open_data, scaler, stock_path, interval, nb_intervals):
     if nb_intervals is 0:
         return numpy.empty((0, NB_INDICATORS))
 
@@ -92,7 +123,7 @@ def predict_multiple_intervals(model, open_data, scaler, stock_path, nb_interval
     data_to_write = scaler.inverse_transform(close_data)
     data_to_write = numpy.ndarray.flatten(data_to_write)
 
-    write_predict(stock_path, data_to_write)
+    write_predict(stock_path, data_to_write, interval)
     close_data = add_indicators_to_predict(stock_path)
 
     return numpy.vstack(
@@ -116,6 +147,7 @@ def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_
     )
 
     #test_model(model, x_test, y_test, scaler, interval)
-    #toto = predict_multiple_intervals(model, x_test[len(x_test) - 1], scaler, stock_path, 1)
+    #toto = predict_multiple_intervals(model, x_test[len(x_test) - 1], scaler, stock_path, '1m', 3)
+    #print(toto)
 
     dump(scaler, f'{model_path}/std_scaler.bin', compress=True)
