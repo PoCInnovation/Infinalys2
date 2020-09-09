@@ -17,7 +17,7 @@ import sys
 sys.path.insert(1, '../ai')
 
 from main import generate_model_on_stock
-from predict import predict_one_interval
+from predict import predict_one_interval, predict_multiple_intervals
 from list_to_tsv import list_to_tsv
 from data_utils import normalize_data, delete_nans_in_data
 
@@ -35,20 +35,12 @@ PORT = 8080
 DEBUG = True
 
 MODELS_PATH = "../../saves/models"
+STOCKS_PATH = "../../saves/stocks"
 TSV_PATH = "../../saves/tsv"
 NB_INDICATORS = 15
 
 class Form(FlaskForm):
     interval = SelectField('interval', choices=['1m', '2m', '5m', '15m', '30m', '60m', '90m','1h', '1d', '5d', '1wk', '1mo', '3mo'])
-
-def prepare_prediction(array: numpy.array):
-    scaler = StandardScaler()
-    array = normalize_data(array, array, scaler, NB_INDICATORS + 1)[0]
-    open_data = array[len(array) - 1]
-    open_data[1] = open_data[4]
-    open_data = numpy.delete(open_data, 4, 0)
-
-    return (open_data)
 
 def get_interval():
     interval = None
@@ -65,20 +57,22 @@ def prediction_ia(stock_symbol, interval, model_path):
     new_scaler = StandardScaler()
 
     stocks = delete_nans_in_data(stocks_data)
-    stocks = numpy.delete(stocks, 3, 1)
     stocks = new_scaler.fit_transform(stocks)
     stock = stocks[len(stocks) - 1]
 
-    prediction = predict_one_interval(model, stock, scaler)
+    stock_path = f'{STOCKS_PATH}/{stock_symbol}_{interval}.csv'
+
+    prediction = predict_multiple_intervals(model, stock, scaler, stock_path, interval, 1)
     return (prediction)
 
 def get_info(stock_symbol, interval):
     model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
 
-    predict = prediction_ia(stock_symbol, interval, model_path)
-    predict = [0, predict[0][1], predict[0][1], predict[0][2], predict[0][3], predict[0][4]]
+    prediction_ia(stock_symbol, interval, model_path)
+    #predict = numpy.ndarray.flatten(predict)
+    #predict = [0, predict[0], predict[1], predict[2], predict[3], predict[5]]
 
-    list_to_tsv(stock_symbol, interval, predict)
+    list_to_tsv(stock_symbol, interval)
 
 @cross_origin()
 @app.route("/", methods=["GET", "POST"])
