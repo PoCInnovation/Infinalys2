@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from joblib import load
 
 from flask_wtf import FlaskForm
+from flask_cors import CORS, cross_origin
 from wtforms import SelectField
 
 import tensorflow
@@ -22,6 +23,9 @@ from data_utils import normalize_data, delete_nans_in_data
 
 app = Flask(__name__)
 cors = CORS(app)
+
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.config['SECRET_KEY'] = 'secret'
 app.config['CORS_HEADER'] = 'Content-Type'
@@ -76,6 +80,7 @@ def get_info(stock_symbol, interval):
 
     list_to_tsv(stock_symbol, interval, predict)
 
+@cross_origin()
 @app.route("/", methods=["GET", "POST"])
 @cross_origin()
 def backend():

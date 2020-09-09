@@ -112,6 +112,7 @@ function App() {
                 {
                   stockData.map((stock, index) => (
                     <StockExchange
+                      key={index.toString()}
                       selected={selectedIndex === index}
                       handle={() => handleListItemClick(index, stock.index)}
                       label={stock.label}
