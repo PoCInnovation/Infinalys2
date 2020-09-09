@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from flask import Flask, jsonify, request, send_file, render_template
+from flask_cors import CORS, cross_origin
 from sklearn.preprocessing import StandardScaler
 from joblib import load
 
@@ -20,8 +21,10 @@ from list_to_tsv import list_to_tsv
 from data_utils import normalize_data, delete_nans_in_data
 
 app = Flask(__name__)
+cors = CORS(app)
 
 app.config['SECRET_KEY'] = 'secret'
+app.config['CORS_HEADER'] = 'Content-Type'
 
 HOST = "0.0.0.0"
 PORT = 8080
@@ -74,6 +77,7 @@ def get_info(stock_symbol, interval):
     list_to_tsv(stock_symbol, interval, predict)
 
 @app.route("/", methods=["GET", "POST"])
+@cross_origin()
 def backend():
     interval = get_interval()
     form = Form()
