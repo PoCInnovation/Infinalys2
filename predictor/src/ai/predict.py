@@ -92,7 +92,13 @@ def predict_one_interval(model, open_data, scaler):
 
 def get_time_to_add(nb_calls, interval):
     #TODO use magic array ""
-    return (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls))
+    add_time = 0
+    
+    for intervals in TIME_BY_INTERVAL:
+        if (intervals[0] == interval):
+            add_time = intervals[1] + datetime.timedelta(days=nb_calls)
+    #return (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls))
+    return (datetime.date.today() + add_time)
 
 def write_predict(stock_path, close_data, interval):
     write_predict.nb_calls += 1
