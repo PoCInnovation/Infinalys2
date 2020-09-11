@@ -122,9 +122,13 @@ def predict_multiple_intervals(model, open_data, scaler, stock_path, interval, n
     close_data = model.predict(open_data)
     data_to_write = scaler.inverse_transform(close_data)
     data_to_write = numpy.ndarray.flatten(data_to_write)
+    data_to_write[0] = (numpy.ndarray.flatten(scaler.inverse_transform(open_data[0][0:6])))[3]
 
     write_predict(stock_path, data_to_write, interval)
     close_data = add_indicators_to_predict(stock_path)
+
+    close_data = numpy.reshape(close_data, (-1, NB_INDICATORS))
+    close_data = numpy.ndarray.flatten(StandardScaler().fit_transform(close_data))
 
     return numpy.vstack(
         (close_data,
@@ -147,7 +151,8 @@ def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_
     )
 
     #test_model(model, x_test, y_test, scaler, interval)
-    #toto = predict_multiple_intervals(model, x_test[len(x_test) - 1], scaler, stock_path, '1m', 3)
+    #print('x_test: ', scaler.inverse_transform(x_test[len(x_test) - 1][0:6]))
+    #toto = predict_multiple_intervals(model, x_test[len(x_test) - 1], scaler, stock_path, '1mo', 3)
     #print(toto)
 
     dump(scaler, f'{model_path}/std_scaler.bin', compress=True)

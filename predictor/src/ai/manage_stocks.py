@@ -6,7 +6,7 @@ from stockstats import StockDataFrame
 import warnings
 warnings.filterwarnings('ignore')
 
-INDICATORS = ['change', 'volume_delta', 'open_2_sma', 'adx_6_ema', 'macds', 'boll_ub', 'boll_lb', 'rsi_12', 'pdi']
+INDICATORS = ['change', 'volume_delta', 'open_2_sma', 'adx_6_ema', 'macdh', 'boll_ub', 'boll_lb', 'rsi_12', 'pdi']
 
 def add_indicator(array, values):
     bools = []

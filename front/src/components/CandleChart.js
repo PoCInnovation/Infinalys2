@@ -139,9 +139,9 @@ class CandleStickChartWithBollingerBandOverlay extends React.Component {
               const elem = tmp_value[index];
               if (elem.open === d.open && elem.close === d.close && elem.high === d.high && elem.low === d.low) {
                 if (elem.open < elem.close) {
-                  return 'rgb(255, 127, 0)';
+                  return 'rgb(70, 70, 70)';
                 }
-                return 'rgb(255,255,0)';
+                return 'rgb(200, 200, 200)';
               }
             }
             if (d.close > d.open) {

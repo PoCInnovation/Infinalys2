@@ -4,12 +4,13 @@ RUN pip install gunicorn flask tensorflow python-csv pandas matplotlib stockstat
 
 WORKDIR /app
 
-COPY clean_stocks_data.sh /app
-COPY saves /app/saves
+COPY clean_stocks_data.sh /app/
 
-COPY assets /app/assets
+COPY saves /app/saves/
 
-COPY src /app/src
+COPY assets /app/assets/
+
+COPY src /app/src/
 
 EXPOSE 5000
 

@@ -70,7 +70,9 @@ function App() {
     { index: 'FB', label: 'Facebook' },
     { index: 'GOLD', label: 'Or' },
     { index: 'BTC-USD', label: 'Bitcoin' },
-    { index: '^IXIC', label: 'NASDAQ'}
+    { index: '^IXIC', label: 'Nadsaq'},
+    { index: '^DJI', label: 'Dow Jones'},
+    { index: '^N225', label: 'Nikkei 225'}
   ];
   return (
     <div>
