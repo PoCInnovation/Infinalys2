@@ -20,6 +20,7 @@ from main import generate_model_on_stock
 from predict import predict_one_interval, predict_multiple_intervals
 from list_to_tsv import list_to_tsv
 from data_utils import normalize_data, delete_nans_in_data
+from predict import custom_loss_function
 
 app = Flask(__name__)
 cors = CORS(app)

@@ -22,7 +22,7 @@ from datetime import date, time, timedelta
 from manage_stocks import add_indicator, add_indicators_to_predict
 from stockstats import StockDataFrame
 
-EPOCHS = 20
+EPOCHS = 35
 NB_INDICATORS = 15
 TIME_BY_INTERVAL = numpy.array([
         ('1m', timedelta(minutes=1)),
@@ -57,7 +57,7 @@ def create_model(model_path):
     model.add(tensorflow.keras.layers.Dense(6))
 
     model.compile(
-        loss=custom_loss_function,
+        loss=tensorflow.keras.losses.MeanSquaredError(),
         optimizer=tensorflow.keras.optimizers.Adam(lr=1e-3, decay=1e-4),
     )
 
@@ -94,7 +94,7 @@ def get_time_to_add(nb_calls, interval):
     #TODO use magic array ""
     return (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls))
 
-def write_predict(stock_path, close_data, interval, get_time_to_add):
+def write_predict(stock_path, close_data, interval):
     write_predict.nb_calls += 1
 
     time_to_add = get_time_to_add(write_predict.nb_calls, interval)
@@ -128,7 +128,7 @@ def predict_multiple_intervals(model, open_data, scaler, stock_path, interval, n
 
     return numpy.vstack(
         (close_data,
-        predict_multiple_intervals(model, close_data, scaler, stock_path, nb_intervals - 1))
+        predict_multiple_intervals(model, close_data, scaler, stock_path, interval, nb_intervals - 1))
     )
 
 def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_path: str):
