@@ -92,9 +92,17 @@ def predict_one_interval(model, open_data, scaler):
 
 def get_time_to_add(nb_calls, interval):
     #TODO use magic array ""
-    return (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls))
+    add_time = 0
+    tab_predict = []
 
-def write_predict(stock_path, close_data, interval, get_time_to_add):
+    for intervals in TIME_BY_INTERVAL:
+        if (intervals[0] == interval):
+            add_time = intervals[1] + datetime.timedelta(days=nb_calls)
+     #return (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls))
+    print("ICIIII", datetime.date.today() + add_time)
+    return (datetime.date.today() + add_time)
+
+def write_predict(stock_path, close_data, interval): #retirer arg get_time_to_add
     write_predict.nb_calls += 1
 
     time_to_add = get_time_to_add(write_predict.nb_calls, interval)
@@ -128,7 +136,7 @@ def predict_multiple_intervals(model, open_data, scaler, stock_path, interval, n
 
     return numpy.vstack(
         (close_data,
-        predict_multiple_intervals(model, close_data, scaler, stock_path, nb_intervals - 1))
+        predict_multiple_intervals(model, close_data, scaler, stock_path, interval, nb_intervals - 1))
     )
 
 def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_path: str):
