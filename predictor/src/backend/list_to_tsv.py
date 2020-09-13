@@ -33,7 +33,7 @@ def list_to_tsv(stock_symbol: str, interval: str):
     stocks_path = f'{STOCKS_PATH}/{stock_symbol}_{interval}.csv'
     tsv_path = f'{TSV_PATH}/{stock_symbol}_{interval}.tsv'
 
-    with open (stocks_path, 'r', newline='') as csvin, open(tsv_path, 'w') as tsvout:
+    with open (stocks_path, 'r') as csvin, open(tsv_path, 'w') as tsvout:
         tsv_write = csv.writer(tsvout, delimiter='\t')
         string = csv_to_list(csvin)
         for row in string:

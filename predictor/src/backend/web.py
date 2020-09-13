@@ -47,7 +47,7 @@ class Form(FlaskForm):
 def get_nb_interval():
     nb_interval = None
     if request.args.get("nb_interval") is None:
-        nb_interval = "1"
+        nb_interval = 1
     else:
         nb_interval = str(request.args["nb_interval"])
     return (nb_interval)
@@ -79,8 +79,6 @@ def get_info(stock_symbol, interval, nb_interval):
     model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
 
     prediction_ia(stock_symbol, interval, model_path, nb_interval)
-    #predict = numpy.ndarray.flatten(predict)
-    #predict = [0, predict[0], predict[1], predict[2], predict[3], predict[5]]
 
     list_to_tsv(stock_symbol, interval)
 
