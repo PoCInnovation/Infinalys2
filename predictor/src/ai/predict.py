@@ -22,7 +22,7 @@ from datetime import date, time, timedelta
 from manage_stocks import add_indicator, add_indicators_to_predict
 from stockstats import StockDataFrame
 
-EPOCHS = 20
+EPOCHS = 35
 NB_INDICATORS = 15
 TIME_BY_INTERVAL = numpy.array([
         ('1m', timedelta(minutes=1)),
@@ -57,7 +57,7 @@ def create_model(model_path):
     model.add(tensorflow.keras.layers.Dense(6))
 
     model.compile(
-        loss=custom_loss_function,
+        loss=tensorflow.keras.losses.MeanSquaredError(),
         optimizer=tensorflow.keras.optimizers.Adam(lr=1e-3, decay=1e-4),
     )
 
@@ -93,16 +93,14 @@ def predict_one_interval(model, open_data, scaler):
 def get_time_to_add(nb_calls, interval):
     #TODO use magic array ""
     add_time = 0
-    tab_predict = []
-
+    
     for intervals in TIME_BY_INTERVAL:
         if (intervals[0] == interval):
             add_time = intervals[1] + datetime.timedelta(days=nb_calls)
-     #return (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls))
-    print("ICIIII", datetime.date.today() + add_time)
+    #return (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls))
     return (datetime.date.today() + add_time)
 
-def write_predict(stock_path, close_data, interval): #retirer arg get_time_to_add
+def write_predict(stock_path, close_data, interval):
     write_predict.nb_calls += 1
 
     time_to_add = get_time_to_add(write_predict.nb_calls, interval)
@@ -130,9 +128,13 @@ def predict_multiple_intervals(model, open_data, scaler, stock_path, interval, n
     close_data = model.predict(open_data)
     data_to_write = scaler.inverse_transform(close_data)
     data_to_write = numpy.ndarray.flatten(data_to_write)
+    data_to_write[0] = (numpy.ndarray.flatten(scaler.inverse_transform(open_data[0][0:6])))[3]
 
     write_predict(stock_path, data_to_write, interval)
     close_data = add_indicators_to_predict(stock_path)
+
+    close_data = numpy.reshape(close_data, (-1, NB_INDICATORS))
+    close_data = numpy.ndarray.flatten(StandardScaler().fit_transform(close_data))
 
     return numpy.vstack(
         (close_data,
@@ -155,7 +157,8 @@ def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_
     )
 
     #test_model(model, x_test, y_test, scaler, interval)
-    #toto = predict_multiple_intervals(model, x_test[len(x_test) - 1], scaler, stock_path, '1m', 3)
+    #print('x_test: ', scaler.inverse_transform(x_test[len(x_test) - 1][0:6]))
+    #toto = predict_multiple_intervals(model, x_test[len(x_test) - 1], scaler, stock_path, '1mo', 3)
     #print(toto)
 
     dump(scaler, f'{model_path}/std_scaler.bin', compress=True)
