@@ -11,12 +11,19 @@ Infinalys2 is the successor of the [Infinalys project](https://github.com/PoCFra
 pip install --user yfinance pandas stockstats tensorflow matplotlib
 ```
 
-### In the `front` folder, install the node modules:
+### To launch docker-compose:
+On the root of project:
 ```bash
-cd front
-npm install
-npm start
+docker-compose up -d --build
 ```
+(also works on podman with [podman_compose](https://github.com/containers/podman-compose) script)
+  
+
+### To stop docker-compose
+```bash
+dokcer-compose stop
+```
+By default, when you launch the docker-composes the site will be accessible on the [http://localhost:3000/](http://localhost:3000/)
 
 ## Overview
 
