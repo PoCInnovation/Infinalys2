@@ -42,6 +42,15 @@ NB_INDICATORS = 15
 
 class Form(FlaskForm):
     interval = SelectField('interval', choices=['1m', '2m', '5m', '15m', '30m', '60m', '90m','1h', '1d', '5d', '1wk', '1mo', '3mo'])
+    nb_interval = SelectField('nb_interval', choices=[1, 2, 3])
+
+def get_nb_interval():
+    nb_interval = None
+    if request.args.get("nb_interval") is None:
+        nb_interval = 1
+    else:
+        nb_interval = str(request.args["nb_interval"])
+    return (nb_interval)
 
 def get_interval():
     interval = None
@@ -51,7 +60,7 @@ def get_interval():
         interval = str(request.args["interval"])
     return (interval)
 
-def prediction_ia(stock_symbol, interval, model_path):
+def prediction_ia(stock_symbol, interval, model_path, nb_interval):
     stocks_data = generate_model_on_stock(stock_symbol, interval)
     scaler = load(f'{model_path}/std_scaler.bin')
     model = tensorflow.keras.models.load_model(model_path)
@@ -63,13 +72,13 @@ def prediction_ia(stock_symbol, interval, model_path):
 
     stock_path = f'{STOCKS_PATH}/{stock_symbol}_{interval}.csv'
 
-    prediction = predict_multiple_intervals(model, stock, scaler, stock_path, interval, 1)
+    prediction = predict_multiple_intervals(model, stock, scaler, stock_path, interval, nb_interval)
     return (prediction)
 
-def get_info(stock_symbol, interval):
+def get_info(stock_symbol, interval, nb_interval):
     model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
 
-    prediction_ia(stock_symbol, interval, model_path)
+    prediction_ia(stock_symbol, interval, model_path, nb_interval)
     #predict = numpy.ndarray.flatten(predict)
     #predict = [0, predict[0], predict[1], predict[2], predict[3], predict[5]]
 
@@ -80,15 +89,17 @@ def get_info(stock_symbol, interval):
 @cross_origin()
 def backend():
     interval = get_interval()
+    nb_interval = get_nb_interval()
     form = Form()
     if request.args.get('stock') is not None:
         stock_symbol = str(request.args['stock'])
-        get_info(stock_symbol, interval)
+        get_info(stock_symbol, interval, int(nb_interval))
         return (send_file(f'{TSV_PATH}/{stock_symbol}_{interval}.tsv', as_attachment=True))
     try:
         stock_symbol = request.form.get('Stock')
         interval = request.form.get('interval')
-        get_info(stock_symbol, interval)
+        nb_interval = request.form.get('nb_interval')
+        get_info(stock_symbol, interval, int(nb_interval))
         return (send_file(f'{TSV_PATH}/{stock_symbol}_{interval}.tsv', as_attachment=True))
     except:
         return render_template('index.html', form=form)
