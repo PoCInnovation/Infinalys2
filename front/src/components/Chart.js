@@ -17,7 +17,7 @@ class Chart extends React.Component {
     if (this.props.trade !== this.state.tmp_trade || this.props.day !== this.state.tmp_day) {
       this.setState({ tmp_trade: this.props.trade }, () => {
         this.setState({ tmp_day: this.props.day }, () => {
-          getData(this.state.tmp_trade, this.state.tmp_day).then((data) => {
+          getData(this.state.tmp_trade, this.state.tmp_day, this.props.Interval).then((data) => {
             this.setState({ data });
           });
         });

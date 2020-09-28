@@ -20,6 +20,7 @@ export default function SimpleSelect({
   const classes = useStyles();
 
   const handleChange = (event) => {
+    console.log(value);
     setday(event.target.value);
   };
 

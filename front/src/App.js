@@ -91,6 +91,7 @@ function App() {
               rsi={state.Rsi}
               trade={trade}
               day={scope}
+              Interval={day}
             />
           </Grid>
           <Grid item xs>
