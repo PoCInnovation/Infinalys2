@@ -150,7 +150,6 @@ def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_
         epochs=EPOCHS, callbacks=[checkpoint_callback]
     )
 
-    #test_model(model, x_test, y_test, scaler, interval)
-    #predict_multiple_intervals(model, x_test[len(x_test) - 1], scaler, stock_path, '1mo', 3)
+    #test_model(model, x_test, y_test, scaler, interval) // uncomment this if you want to test the ai efficiency
 
     dump(scaler, f'{model_path}/std_scaler.bin', compress=True)
