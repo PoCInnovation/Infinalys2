@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SimpleSelect from './OcurenceSelector';
 
 export default function ButtonAppBar({
-  setMode, setinterval, interval,
+  setMode, setday, interval,
 }) {
   // console.log(setMode);
   return (
@@ -16,7 +16,7 @@ export default function ButtonAppBar({
           <IconButton color="default" onClick={setMode}>
             <Brightness4Icon />
           </IconButton>
-          <SimpleSelect setday={setinterval} value={interval} />
+          <SimpleSelect setday={setday} value={interval} />
         </Toolbar>
       </AppBar>
     </div>

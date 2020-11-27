@@ -27,8 +27,6 @@ function parseData(parse) {
 // http://0.0.0.0:5000/?stock=AAPL&interval=3mo
 
 export default function getData(trade, day, interval) {
-  console.log("utils");
-  console.log(interval);
   const promiseMSFT = fetch(`http://${process.env.NODE_ENV === 'production' ? 'back' : '0.0.0.0'}:5000/?stock=${trade}&interval=${day}&nb_interval=${interval}`)
     .then((response) => response.text())
     .then((data) => tsvParse(data, parseData(parseDate)));
