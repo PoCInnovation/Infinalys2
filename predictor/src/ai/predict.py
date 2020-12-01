@@ -133,17 +133,7 @@ def predict_multiple_intervals(model, open_data, scaler, stock_path, interval, n
     write_predict(stock_path, data_to_write, interval)
     close_data = add_indicators_to_predict(stock_path)
 
-<<<<<<< HEAD
-    close_data = numpy.reshape(close_data, (-1, NB_INDICATORS))
-    close_data = numpy.ndarray.flatten(StandardScaler().fit_transform(close_data))
-
-    return numpy.vstack(
-        (close_data,
-        predict_multiple_intervals(model, close_data, scaler, stock_path, interval, nb_intervals - 1))
-    )
-=======
     return predict_multiple_intervals(model, close_data, scaler, stock_path, interval, nb_intervals - 1)
->>>>>>> 00d5a463a64761d849dbf6a45015befe2cee1ae3
 
 def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_path: str):
     scaler = StandardScaler()
@@ -160,13 +150,6 @@ def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_
         epochs=EPOCHS, callbacks=[checkpoint_callback]
     )
 
-<<<<<<< HEAD
-    #test_model(model, x_test, y_test, scaler, interval)
-    #print('x_test: ', scaler.inverse_transform(x_test[len(x_test) - 1][0:6]))
-    #toto = predict_multiple_intervals(model, x_test[len(x_test) - 1], scaler, stock_path, '1mo', 3)
-    #print(toto)
-=======
     #test_model(model, x_test, y_test, scaler, interval) // uncomment this if you want to test the ai efficiency
->>>>>>> 00d5a463a64761d849dbf6a45015befe2cee1ae3
 
     dump(scaler, f'{model_path}/std_scaler.bin', compress=True)

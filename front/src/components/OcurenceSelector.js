@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleSelect({
-  setday, value,
+  setday, nb_interval,
 }) {
   const classes = useStyles();
 
@@ -26,10 +26,10 @@ export default function SimpleSelect({
   return (
     <div>
       <FormControl className={classes.formControl} />
-      <Select value={value} onChange={handleChange}>
-        <MenuItem value="1">1d</MenuItem>
-        <MenuItem value="2">2d</MenuItem>
-        <MenuItem value="3">3d</MenuItem>
+      <Select value={nb_interval} onChange={handleChange}>
+        <MenuItem value="1">1</MenuItem>
+        <MenuItem value="2">2</MenuItem>
+        <MenuItem value="3">3</MenuItem>
       </Select>
     </div>
   );

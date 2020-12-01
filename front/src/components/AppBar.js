@@ -9,6 +9,8 @@ export default function ButtonAppBar({
   setMode, setday, interval,
 }) {
   // console.log(setMode);
+  //<p style={{color : 'white', fontSize : 16, left : '170px'}}>Nombre de prédictions:</p>
+
   return (
     <div>
       <AppBar position="static" color="primary">
@@ -16,7 +18,8 @@ export default function ButtonAppBar({
           <IconButton color="default" onClick={setMode}>
             <Brightness4Icon />
           </IconButton>
-          <SimpleSelect setday={setday} value={interval} />
+          <p style={{color : 'white', fontSize : 16, marginLeft : '20px', marginRight : '-100px'}}>Nombre de prédictions:</p>
+          <SimpleSelect setday={setday} nb_interval={interval} />
         </Toolbar>
       </AppBar>
     </div>

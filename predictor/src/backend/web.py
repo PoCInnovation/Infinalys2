@@ -72,8 +72,7 @@ def prediction_ia(stock_symbol, interval, model_path, nb_interval):
 
     stock_path = f'{STOCKS_PATH}/{stock_symbol}_{interval}.csv'
 
-    prediction = predict_multiple_intervals(model, stock, scaler, stock_path, interval, nb_interval)
-    return (prediction)
+    predict_multiple_intervals(model, stock, scaler, stock_path, interval, nb_interval)
 
 def get_info(stock_symbol, interval, nb_interval):
     model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
