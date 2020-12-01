@@ -44,6 +44,8 @@ def download_stocks(symbol: str = None, dl_path: str = None, proxies_path: str =
         stock = yf.download(symbol, period='max', interval = interval_arg)
 
     if stock.shape[0] > 2:
+        if list(("1wk", "1mo", "3mo")).count(interval_arg) > 0:
+            stock = stock[0:len(stock) - 1]
         stock.to_csv(stock_name)
         print(f'Successfully Downloaded stock {symbol} !')
         return stock_path

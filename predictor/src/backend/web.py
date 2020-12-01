@@ -79,8 +79,6 @@ def get_info(stock_symbol, interval, nb_interval):
     model_path = f'{MODELS_PATH}/model_{stock_symbol}_{interval}'
 
     prediction_ia(stock_symbol, interval, model_path, nb_interval)
-    #predict = numpy.ndarray.flatten(predict)
-    #predict = [0, predict[0], predict[1], predict[2], predict[3], predict[5]]
 
     list_to_tsv(stock_symbol, interval)
 

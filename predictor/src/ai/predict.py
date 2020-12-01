@@ -10,6 +10,7 @@ import datetime
 import numpy
 import pandas
 import math
+import scipy
 # Csv file manipulatons
 import csv
 #import time
@@ -90,20 +91,20 @@ def predict_one_interval(model, open_data, scaler):
     close_data = scaler.inverse_transform(close_data)
     return close_data
 
-def get_time_to_add(nb_calls, interval):
-    #TODO use magic array ""
-    add_time = 0
-    
-    for intervals in TIME_BY_INTERVAL:
-        if (intervals[0] == interval):
-            add_time = intervals[1] + datetime.timedelta(days=nb_calls)
-    #return (datetime.date.today() + datetime.timedelta(days=write_predict.nb_calls))
-    return (datetime.date.today() + add_time)
+def get_time_to_add(nb_calls, interval, stock_path):
+    data = numpy.genfromtxt(stock_path, delimiter=',', dtype=str)
+    now = datetime.datetime.strptime(str(data[len(data) - 1][0]), "%Y-%m-%d")
+
+    for elem in TIME_BY_INTERVAL:
+        if (elem[0] == interval):
+            time_to_add = elem[1]
+
+    return (now + time_to_add)
 
 def write_predict(stock_path, close_data, interval):
     write_predict.nb_calls += 1
 
-    time_to_add = get_time_to_add(write_predict.nb_calls, interval)
+    time_to_add = get_time_to_add(write_predict.nb_calls, interval, stock_path)
 
     with open(stock_path, 'a+') as file:
         writer = csv.DictWriter(file, fieldnames=['Date', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'])
@@ -120,9 +121,8 @@ def write_predict(stock_path, close_data, interval):
 write_predict.nb_calls = 0
 
 def predict_multiple_intervals(model, open_data, scaler, stock_path, interval, nb_intervals):
-    if nb_intervals is 0:
-        return numpy.empty((0, NB_INDICATORS))
-
+    if nb_intervals == 0:
+        return
     open_data = numpy.reshape(open_data, (-1, NB_INDICATORS))
 
     close_data = model.predict(open_data)
@@ -133,6 +133,7 @@ def predict_multiple_intervals(model, open_data, scaler, stock_path, interval, n
     write_predict(stock_path, data_to_write, interval)
     close_data = add_indicators_to_predict(stock_path)
 
+<<<<<<< HEAD
     close_data = numpy.reshape(close_data, (-1, NB_INDICATORS))
     close_data = numpy.ndarray.flatten(StandardScaler().fit_transform(close_data))
 
@@ -140,6 +141,9 @@ def predict_multiple_intervals(model, open_data, scaler, stock_path, interval, n
         (close_data,
         predict_multiple_intervals(model, close_data, scaler, stock_path, interval, nb_intervals - 1))
     )
+=======
+    return predict_multiple_intervals(model, close_data, scaler, stock_path, interval, nb_intervals - 1)
+>>>>>>> 00d5a463a64761d849dbf6a45015befe2cee1ae3
 
 def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_path: str):
     scaler = StandardScaler()
@@ -156,9 +160,13 @@ def predict_on_stocks(array: numpy.array, model_path: str, interval: str, stock_
         epochs=EPOCHS, callbacks=[checkpoint_callback]
     )
 
+<<<<<<< HEAD
     #test_model(model, x_test, y_test, scaler, interval)
     #print('x_test: ', scaler.inverse_transform(x_test[len(x_test) - 1][0:6]))
     #toto = predict_multiple_intervals(model, x_test[len(x_test) - 1], scaler, stock_path, '1mo', 3)
     #print(toto)
+=======
+    #test_model(model, x_test, y_test, scaler, interval) // uncomment this if you want to test the ai efficiency
+>>>>>>> 00d5a463a64761d849dbf6a45015befe2cee1ae3
 
     dump(scaler, f'{model_path}/std_scaler.bin', compress=True)

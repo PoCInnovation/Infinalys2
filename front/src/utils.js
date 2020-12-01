@@ -6,19 +6,11 @@ const parseDate = timeParse('%Y-%m-%d');
 function parseData(parse) {
   return function (d) {
     d.date = parseDate(d.Date);
-    // var curentday = new Date()
-    // if (curentday < d.date) {
-    // 	console.log(curentday)
-    // 	console.log(d.date)
-    // }
     d.open = +d.Open;
     d.high = +d.High;
     d.low = +d.Low;
     d.close = +d.Close;
     d.volume = +d.Volume;
-    // if (d.volume === 0) {
-    //   console.log(d);
-    // }
     return d;
   };
 }
