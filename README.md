@@ -31,7 +31,7 @@ docker-compose up -d
 
 ### To stop docker-compose
 ```bash
-dokcer-compose stop
+docker-compose stop
 ```
 
 ## Customisation
@@ -42,8 +42,7 @@ The result of the fetch of `companies_test` is put into the `stock` file
 
 ## Demonstration
 
-![](.github/all_indicator.png)
-![](.github/boolinger_mult.png)
+![](.github/demo.gif)
 
 ## Built with
 
