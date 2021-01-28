@@ -44,6 +44,19 @@ The result of the fetch of `companies_test` is put into the `stock` file
 
 ![](.github/demo.gif)
 
+## Explain
+### General
+
+![](.github/general.svg)
+
+### Backend
+
+![](.github/backend.svg)
+
+### Frontend
+
+![](.github/frontend.svg)
+
 ## Built with
 
 * [yahoo-finance-api](https://github.com/topics/yahoo-finance-api) - Fetch framework used
