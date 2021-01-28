@@ -2,7 +2,7 @@
 
 ## What is Infinalys2
 
-Infinalys2 is a [PoC](https://github.com/PoCFrance) project and the successor of the [Infinalys project](https://github.com/PoCFrance/Infinalys).  
+Infinalys2 is a [PoC](https://github.com/PoCFrance) project which aims to create a stock prediction's App based on [Infinalys project's](https://github.com/PoCFrance/Infinalys) model.  
 
 It's a Web App that displays the history of the stock markets (curve since launch, with stock market indicators, volume, and time intervals), and their predictions (under one or more days / weeks / months), thanks to the backend, which itself draws its predictions from artificial intelligence in deep learning by taking into account the stock market indicators and history.
 
