@@ -45,17 +45,8 @@ The result of the fetch of `companies_test` is put into the `stock` file
 ![](.github/demo.gif)
 
 ## Explain
-### General
 
-![](.github/general.svg)
-
-### Backend
-
-![](.github/backend.svg)
-
-### Frontend
-
-![](.github/frontend.svg)
+The whole architecture of the project and its functioning is documented [here](ARCHITECTURE.md)
 
 ## Built with
 
@@ -68,6 +59,5 @@ The result of the fetch of `companies_test` is put into the `stock` file
 
 ## Authors
 
- - [Alexandre Chetrit](https://github.com/chetrit)
- - [Coline Seguret](https://github.com/Cleopha)
- - [Grégoire Brasseur](https://github.com/lerimeur)
+| [<img src="https://github.com/chetrit.png?size=85" width=85><br><sub>Alexandre Chetrit</sub>](https://github.com/chetrit) | [<img src="https://github.com/Cleopha.png?size=85" width=85><br><sub>Coline Seguret</sub>](https://github.com/Cleopha) | [<img src="https://github.com/lerimeur.png?size=85" width=85><br><sub>Grégoire Brasseur</sub>](https://github.com/lerimeur) 
+| :---: | :---: |:---: |
